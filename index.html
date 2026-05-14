@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book of Hours Database</title>
+  <title>Book of Hours: Complete Wiki</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -13,14 +13,14 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #f5f5f5;
       color: #333;
       line-height: 1.6;
     }
     
     .container {
-      max-width: 900px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 1rem;
     }
@@ -35,13 +35,13 @@
     }
     
     header h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 0.5rem;
     }
     
     header p {
-      font-size: 0.95rem;
-      opacity: 0.9;
+      font-size: 1rem;
+      opacity: 0.95;
     }
     
     .mode-tabs {
@@ -50,6 +50,7 @@
       margin-bottom: 2rem;
       flex-wrap: wrap;
       border-bottom: 2px solid #ddd;
+      overflow-x: auto;
     }
     
     .mode-btn {
@@ -84,7 +85,6 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 1rem;
-      transition: border-color 0.2s;
     }
     
     .search-container input:focus {
@@ -104,7 +104,7 @@
       border-radius: 6px;
       border-left: 4px solid #2c3e50;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
     }
     
     .result-card:hover {
@@ -125,11 +125,7 @@
       line-height: 1.7;
     }
     
-    .result-detail strong {
-      color: #2c3e50;
-    }
-    
-    .principle-badge {
+    .badge {
       display: inline-block;
       background: #e8f4f8;
       color: #2c5aa0;
@@ -169,7 +165,14 @@
     .help-section h3 {
       font-size: 1rem;
       color: #2c3e50;
-      margin: 1.25rem 0 0.5rem 0;
+      margin: 1.5rem 0 0.75rem 0;
+    }
+    
+    .help-section h4 {
+      font-size: 0.95rem;
+      color: #2c3e50;
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 600;
     }
     
     .tip {
@@ -181,15 +184,32 @@
       font-size: 0.9rem;
     }
     
-    .tip strong {
-      display: block;
-      color: #2c3e50;
-      margin-bottom: 0.25rem;
+    .mech-box {
+      background: #f5f9ff;
+      border: 1px solid #dde8f5;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+    }
+    
+    .mech-box h4 {
+      color: #1a3a5c;
+      margin-bottom: 0.75rem;
+    }
+    
+    .mech-box ol, .mech-box ul {
+      margin-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .mech-box li {
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
     }
     
     .phase {
       background: #f9f9f9;
-      padding: 1rem;
+      padding: 1.25rem;
       margin: 1rem 0;
       border-left: 4px solid #27ae60;
       border-radius: 4px;
@@ -198,24 +218,25 @@
     .phase strong {
       color: #27ae60;
       display: block;
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+    }
+    
+    .phase ul {
+      margin-left: 1.5rem;
+    }
+    
+    .phase li {
       margin-bottom: 0.5rem;
+      line-height: 1.6;
     }
     
-    .principles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.75rem;
-      margin: 1rem 0;
+    .mode-content {
+      display: none;
     }
     
-    .principle-item {
-      background: #f0f8ff;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-weight: 500;
-      color: #2c5aa0;
-      font-size: 0.9rem;
-      text-align: center;
+    .mode-content.active {
+      display: block;
     }
     
     .no-results {
@@ -227,121 +248,134 @@
       border-radius: 6px;
     }
     
-    #hushHouseMap {
+    svg.map {
       width: 100%;
       border: 1px solid #ddd;
       border-radius: 6px;
-      margin-bottom: 1.5rem;
-      background: #f9f9f9;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    }
-    
-    .detail-panel {
-      position: fixed;
-      right: -450px;
-      top: 0;
-      width: 450px;
-      height: 100vh;
       background: white;
-      box-shadow: -2px 0 8px rgba(0,0,0,0.15);
-      transition: right 0.3s ease;
-      overflow-y: auto;
-      z-index: 1000;
-      padding: 0;
+      margin: 1rem 0;
     }
     
-    .detail-panel.open {
-      right: 0;
-    }
-    
-    .detail-panel-header {
-      background: linear-gradient(135deg, #2c3e50 0%, #3d566e 100%);
-      color: white;
-      padding: 1.5rem;
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .detail-panel-header h2 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-    
-    .detail-panel-close {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
+    .room-box {
       cursor: pointer;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transition: opacity 0.2s;
     }
     
-    .detail-panel-close:hover {
-      background: rgba(255,255,255,0.2);
+    .room-box:hover {
+      opacity: 0.8;
+    }
+    
+    .room-label {
+      font-size: 10px;
+      font-weight: bold;
+      text-anchor: middle;
+      pointer-events: none;
+      fill: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .room-tooltip {
+      position: absolute;
+      background: #2c3e50;
+      color: white;
+      padding: 0.5rem 1rem;
       border-radius: 4px;
-    }
-    
-    .detail-panel-content {
-      padding: 1.5rem;
-    }
-    
-    .detail-section {
-      margin-bottom: 1.5rem;
-    }
-    
-    .detail-section h3 {
-      color: #2c3e50;
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      opacity: 0.7;
-    }
-    
-    .detail-section p {
-      color: #333;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin: 0;
-    }
-    
-    .room-priority {
-      padding: 0.75rem;
-      margin: 0.75rem 0;
-      border-radius: 4px;
-      background: #f0f8ff;
-      border-left: 3px solid #e74c3c;
-    }
-    
-    .room-priority.priority-1 {
-      background: #ffe8e8;
-      border-left-color: #c0392b;
-    }
-    
-    .room-priority.priority-2 {
-      background: #fff8e8;
-      border-left-color: #f39c12;
-    }
-    
-    .room-priority.priority-3 {
-      background: #f0f8ff;
-      border-left-color: #3498db;
-    }
-    
-    .mode-content {
+      font-size: 0.85rem;
+      pointer-events: none;
+      z-index: 1000;
+      max-width: 250px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       display: none;
     }
     
-    .mode-content.active {
-      display: block;
+    .era-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .legend-color {
+      width: 30px;
+      height: 20px;
+      border-radius: 3px;
+    }
+    
+    .crafting-chain {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .alert {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+    
+    .alert strong {
+      color: #f39c12;
+    }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .card-box {
+      background: white;
+      padding: 1.25rem;
+      border-radius: 6px;
+      border: 1px solid #eee;
+    }
+    
+    .card-box h4 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    
+    .card-box p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .priority-badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .priority-1 {
+      background: #ffe8e8;
+      color: #c0392b;
+    }
+
+    .priority-2 {
+      background: #fff8e8;
+      color: #f39c12;
+    }
+
+    .priority-3 {
+      background: #f0f8ff;
+      color: #3498db;
     }
     
     @media (max-width: 600px) {
@@ -357,14 +391,9 @@
         padding: 0.5rem 0.75rem;
         font-size: 0.85rem;
       }
-      
-      .principles-grid {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      }
-      
-      .detail-panel {
-        width: 100%;
-        right: -100%;
+
+      .grid-2 {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -372,521 +401,490 @@
 <body>
   <div class="container">
     <header>
-      <h1>📚 Book of Hours Database</h1>
-      <p>Comprehensive guide with rooms, workstations, recipes, and progression strategies. Mobile-friendly—bookmark this!</p>
+      <h1>📚 Book of Hours: Complete Wiki</h1>
     </header>
     
     <div class="mode-tabs">
-      <button class="mode-btn active" onclick="switchMode('help')">Getting Started</button>
+      <button class="mode-btn active" onclick="switchMode('route')">The Route</button>
+      <button class="mode-btn" onclick="switchMode('map')">Map</button>
       <button class="mode-btn" onclick="switchMode('rooms')">Rooms</button>
       <button class="mode-btn" onclick="switchMode('workstations')">Workstations</button>
+      <button class="mode-btn" onclick="switchMode('crafting')">Crafting</button>
       <button class="mode-btn" onclick="switchMode('books')">Books</button>
-      <button class="mode-btn" onclick="switchMode('recipes')">Recipes</button>
-      <button class="mode-btn" onclick="switchMode('memories')">Memories</button>
       <button class="mode-btn" onclick="switchMode('skills')">Skills</button>
-      <button class="mode-btn" onclick="switchMode('items')">Items</button>
-    </div>
-    
-    <div id="help" class="mode-content active">
-      <div class="help-section">
-        <h2>🎮 How to Read Your First Book (What You're Doing Wrong)</h2>
-        <p><strong>Your problem:</strong> You're trying <em>Prophecies of Glory</em> (mystery 12). Stop. It requires 3 Sky + 2 Lantern, and you don't have the foundation. Start with these instead:</p>
-        <div class="tip"><strong>Read FIRST (mystery 4-5):</strong> Perugian Diaries, What Does Not Bark, The Locksmith's Dream vol.4. All found in Dispensary after unlocking it.</div>
-        <div class="tip"><strong>Step 1: Slot a Book</strong> into a Reading Desk. The book shows you what it requires (e.g., "2 Sky").</div>
-        <div class="tip"><strong>Step 2: Add a Soul Card</strong> (character). This gives 1-4 Principles. Any Soul works—they're not consumed.</div>
-        <div class="tip"><strong>Step 3: Add a Skill (optional)</strong> If you have one matching the book's Principles, slot it. If not, proceed anyway.</div>
-        <div class="tip"><strong>Step 4: Add Other Boosters</strong> Memory (2-6 Principles), Tool (1-3), Beverage, Weather. Pick one of each type.</div>
-        <div class="tip"><strong>Step 5: Click Read</strong> If your total ≥ book's requirement, you win a Lesson + Memory. If not, you lose the items and the book corrupts.</div>
-      </div>
-
-      <div class="help-section">
-        <h2>📋 The 3 Game Phases</h2>
-        <div class="phase">
-          <strong>PHASE 1: BOOTSTRAP (Day 1-3)</strong>
-          <p><em>Goal: Get 3 guaranteed skills, unlock 6-8 easy rooms, build initial Memories.</em></p>
-          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-            <li>Unlock <strong>Motley Tower → Dispensary</strong>. Catalog books there to get 3 guaranteed books (Perugian Diaries, What Does Not Bark, Locksmith's Dream).</li>
-            <li>Read these 3 books to get Strings & Songs, Edicts Inviolable, Watchman's Paradoxes.</li>
-            <li>Unlock <strong>Kitchen</strong> and <strong>Well</strong> next. These have unlimited free drinks and food.</li>
-            <li>Unlock <strong>Reading Room</strong>—it has the most shelf space for books you'll master.</li>
-            <li>DO NOT reply to Rhonwen Trust letter yet—it triggers book corruption. You can ignore it for 10+ days.</li>
-            <li>Talk to your free assistant about topics to boost their Principles for rooms (costs nothing).</li>
-            <li><strong>Don't craft yet.</strong> Focus on reading easy books and unlocking rooms.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <strong>PHASE 2: EXPANSION (Day 4-15)</strong>
-          <p><em>Goal: Read 15-20 books to collect the 22 guaranteed Memories, unlock Curia/Solar Temple, start crafting.</em></p>
-          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-            <li>By now you should have 3-5 Skills. Level them to lv2-3 by reading books and re-reading mastered ones.</li>
-            <li>Unlock rooms in <strong>Baronial area</strong>. You need both your free assistant (don't hire yet) and crafted boosters.</li>
-            <li>Start crafting basic items: <strong>Amethyst Ampoule</strong> (Knock), <strong>Dearday Lens</strong> (Lantern), <strong>Leathy</strong> (Moth/Nectar).</li>
-            <li>Hire <strong>Unusual Help</strong> at tavern (costs money) once you have 2-3 ways to boost a Principle to 14+.</li>
-            <li>Reach <strong>Solar Temple</strong> and <strong>Curia</strong>. These open up late-game rooms.</li>
-            <li>Gather 22 guaranteed Memories from reading different books. Use these for future skill leveling.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <strong>PHASE 3: MASTERY (Day 15+)</strong>
-          <p><em>Goal: Craft persistent Memories, level key Skills to lv5+, unlock 80% of rooms, prep for ending.</em></p>
-          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-            <li>Craft <strong>persistent Memories</strong>: Wormwood Dream (Moon/Winter), Wind-in-Waiting (Sky), Curious Hunch (Knock).</li>
-            <li>Unlock <strong>Caverns, Gaol, Sisterhood</strong>—highest-level rooms. These need crafted boosters + Unusual Help.</li>
-            <li>Find Numen books (hidden throughout house). Each gives a 5-Principle Memory—game-changer.</li>
-            <li>Level <strong>Edicts Martial, Strings & Songs, Sights & Sensations</strong> to lv5-7. These are your crafting backbone.</li>
-            <li>Craft Encaustum Terminale Inks (Uzult, Marakat, Nillycant, Porphyrine). These unlock 18+ mystery books.</li>
-            <li>Prep for ending: gather Numen + Ink + Journal with 25 of one Principle = write a History = beat the game.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="help-section">
-        <h2>⚙️ Key Mechanics You're Missing</h2>
-        <h3>Soul Cards (Your Fragments)</h3>
-        <p>You start with 2. Unlock more by binding Skills to the Wisdom Tree (the card grid in lower right). Each slot gives you a new Soul card type when filled. You get 9 total. Each Soul can be used multiple times per day—they're not consumed. But they get <strong>fatigued</strong> after use and must rest overnight.</p>
-        <h3>Lessons vs. Memories</h3>
-        <p><strong>Lessons</strong> (finite, yellow cards) come from reading books. They unlock new Skills or level existing ones. Use them strategically—don't waste them. <strong>Memories</strong> (common, blue cards) come from considering objects, reading mastered books, or crafting. They're temporary—they fade at day end. Reusable is fine.</p>
-        <h3>Upgrading Assistants for Room Unlocking</h3>
-        <p>When you talk to an assistant (free or hired), you can give them <strong>ONE of each</strong>: Memory, Soul card, Tool, Beverage, Food. This boosts their Principles for that day. Some assistants (blacksmith, engineer, poet) have a 6th slot for special items (metal, fuel, flowers). You only unlock one room per assistant per day.</p>
-        <h3>Don't Upgrade Soul Cards Yet</h3>
-        <p>Soul evolution (turning a Soul into +Soul or ++Soul for more Principles) sounds good but costs <strong>3 actions per day permanently</strong>. Early game, skip it. Even late game, only upgrade if you have spare actions.</p>
-        <h3>Weather is Free</h3>
-        <p>Every day you get random weather (Sunny, Fog, Snow, etc.). Each adds 2-3 of a Principle. Use it! It's renewable and free.</p>
-      </div>
-
-      <div class="help-section">
-        <h2>⚡ The 12 Principles (Aspects)</h2>
-        <p>Every book, item, and skill has Principles. You combine them to meet requirements:</p>
-        <div class="principles-grid">
-          <div class="principle-item">Edge</div>
-          <div class="principle-item">Forge</div>
-          <div class="principle-item">Grail</div>
-          <div class="principle-item">Heart</div>
-          <div class="principle-item">Knock</div>
-          <div class="principle-item">Lantern</div>
-          <div class="principle-item">Moon</div>
-          <div class="principle-item">Moth</div>
-          <div class="principle-item">Nectar</div>
-          <div class="principle-item">Rose</div>
-          <div class="principle-item">Scale</div>
-          <div class="principle-item">Sky</div>
-        </div>
-      </div>
-
-      <div class="help-section">
-        <h2>🎯 What to Unlock First (Priority)</h2>
-        <div class="room-priority priority-1"><strong>PRIORITY 1 (Do ASAP):</strong> Motley Tower (Dispensary) → Kitchen → Well. These unlock 3 guaranteed books, food/drinks, and unlimited water.</div>
-        <div class="room-priority priority-2"><strong>PRIORITY 2 (Next 3 days):</strong> Reading Room, Grand Ascent, Baronial rooms. Reading Room has 30+ shelf spaces. Grand Ascent has the Spintria (learn languages early).</div>
-        <div class="room-priority priority-3"><strong>PRIORITY 3 (Week 2):</strong> Solar Temple, Curia, Fludd Gallery, Alchemist's Glassware. These unlock crafting chains.</div>
-      </div>
+      <button class="mode-btn" onclick="switchMode('mechanics')">Mechanics</button>
     </div>
 
+    <!-- MECHANICS TUTORIAL -->
+    <div id="mechanics" class="mode-content">
+      <div class="help-section">
+        <h2>⚙️ Core Mechanics: 6 Systems to Master</h2>
+        <p style="margin-bottom: 1.5rem;">Book of Hours has 6 interconnected systems. Understanding these is the key to beating the game.</p>
+
+        <h3>1. SOUL ELEMENTS (Your Power)</h3>
+        <div class="mech-box">
+          <h4>What are they?</h4>
+          <p>Soul Elements are colored cards with aspects. You start with 2 (usually Health + one other). Each:</p>
+          <ul>
+            <li><strong>Has aspects:</strong> e.g., Phost = 2 Sky + 1 Lantern</li>
+            <li><strong>Gets used:</strong> Slot into desks to read books, into rooms to unlock, into workstations to craft</li>
+            <li><strong>Gets fatigued:</strong> After use, needs to rest (~1 day) before reusing</li>
+            <li><strong>Can be maladied:</strong> From contaminated books or failed reads. Cure at beds with matching drinks</li>
+            <li><strong>Can evolve:</strong> Combine 2 identical + skill (attuned to that element) at special workstation = +Element (more power)</li>
+          </ul>
+        </div>
+
+        <h4>The 9 Soul Types:</h4>
+        <p style="font-size: 0.9rem; margin: 0.75rem 0;"><strong>Health:</strong> Heart/Nectar/Scale • <strong>Chor:</strong> Grail/Heart/Lantern • <strong>Ereb:</strong> Edge/Grail/Moon • <strong>Fet:</strong> Rose/Grail/Knock • <strong>Mettle:</strong> Edge/Forge/Knock • <strong>Phost:</strong> Sky/Lantern/Forge • <strong>Shapt:</strong> Knock/Winter/Forge • <strong>Trist:</strong> Moon/Winter/Rose • <strong>Wist:</strong> Scale/Winter/Moon</p>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h3>2. SKILLS (Your Spellbook)</h3>
+        <div class="mech-box">
+          <h4>What are they?</h4>
+          <p>Skills are power cards with 2 aspects each. They:</p>
+          <ul>
+            <li><strong>Read books:</strong> Slot into desk + soul + book to solve mysteries</li>
+            <li><strong>Craft items:</strong> Slot into workstations to make inks, memories, tools</li>
+            <li><strong>Level up:</strong> Spend 1 Lesson + matching memories to increase aspects (Lesson becomes permanent skill)</li>
+            <li><strong>Get attuned:</strong> Commit to Tree of Wisdom to get Soul element + unlock evolution stations</li>
+          </ul>
+        </div>
+
+        <h4>Getting Skills:</h4>
+        <ul style="margin-left: 1.5rem;">
+          <li><strong>From Lessons:</strong> Read any book first time → get unique Lesson → use Consider to turn into Skill</li>
+          <li><strong>3 guaranteed early:</strong> Catalog Dispensary for Strings & Songs, Edicts Inviolable, Watchman's Paradoxes</li>
+          <li><strong>Total in game:</strong> 63+ skills. Get them by reading books</li>
+        </ul>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h3>3. READING BOOKS (The Core Challenge)</h3>
+        <div class="mech-box">
+          <h4>The Mystery System:</h4>
+          <p>Every book has a Mystery (2–25 aspects) and Principle (aspect type like Sky or Knock). To read:</p>
+          <ol>
+            <li><strong>Catalog it:</strong> Consider book with any soul → reveals its Mystery level</li>
+            <li><strong>Take to matching desk:</strong> Sky Mystery? Use Sky desk</li>
+            <li><strong>Slot:</strong> Soul + Skill + Book + (optionally) Memory/Tool/Weather</li>
+            <li><strong>Check if you hit the Mystery:</strong> Total aspects ≥ Mystery? You succeed<br/>Less? Get 3 random chances during reading to boost (risky)</li>
+            <li><strong>Reward:</strong> First read = Lesson (becomes Skill) + Memory. Re-reads = same Memory (renewable)</li>
+          </ol>
+        </div>
+
+        <h4>Contamination & Curses:</h4>
+        <p style="margin-bottom: 0.75rem;">Some books have curses or contaminations that cause maladies if you use certain souls:</p>
+        <ul style="margin-left: 1.5rem;">
+          <li><strong>Avoid:</strong> Use a soul element that doesn't match the curse's type</li>
+          <li><strong>Cure:</strong> At desk, use book + skill + enough aspect (e.g., "cure needs 7 Knock")</li>
+          <li><strong>Ignore:</strong> Some curses don't affect common souls (e.g., Chionic doesn't malady Wist)</li>
+        </ul>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h3>4. CRAFTING (Making Powerful Items)</h3>
+        <div class="mech-box">
+          <h4>The Recipe System:</h4>
+          <p>Workstations have recipes at 3 levels: Prentice (5 aspect), Scholar (10), Keeper (15). To craft:</p>
+          <ol>
+            <li>Find the right workstation (e.g., Kitchen Range for food)</li>
+            <li>Choose a Skill (must have the recipe)—determines output</li>
+            <li>Slot: Soul + Skill + Inputs (varies: Memories, ingredients, tools, inks)</li>
+            <li>Hit the aspect cost (e.g., 10 Forge for Gervinite)</li>
+            <li>Get the item back (permanent until used, or consumable)</li>
+          </ol>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h3>5. ROOM UNLOCKING (Exploration)</h3>
+        <div class="mech-box">
+          <h4>How It Works:</h4>
+          <ol>
+            <li>Room shows requirement: "6 Heart OR 6 Sky" (you only need ONE)</li>
+            <li>Get an assistant (free helper each game, or hire for ~50 pence)</li>
+            <li>Boost their aspects via Talk: give Memory + Soul + Tool + Drink + Food</li>
+            <li>Once they have enough, send to room (costs 1 day)</li>
+            <li>Room unlocks permanently</li>
+          </ol>
+        </div>
+
+        <h4>Pro Tips:</h4>
+        <ul style="margin-left: 1.5rem;">
+          <li><strong>Only need one aspect:</strong> Ignore the others. 6 Heart alone is fine</li>
+          <li><strong>Assistant aspects stack:</strong> Memory (2–6) + Soul (1–4) + Tool (1) + Drink (1–2) + Food (1–2) = 7–17 total</li>
+          <li><strong>Money is free:</strong> Earn 6 pence per action at tavern. Hire costs 50–100. No scarcity</li>
+          <li><strong>One room per assistant per day:</strong> Can't unlock 2 rooms same day with same helper</li>
+        </ul>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #ddd;">
+
+        <h3>6. TREE OF WISDOM (Soul Evolution Hub)</h3>
+        <div class="mech-box">
+          <h4>What It Does:</h4>
+          <p>9-part wheel where you slot Skills. Each gives you a new Soul element + "attunes" skill for evolution.</p>
+          <ul style="margin-left: 1.5rem;">
+            <li><strong>Each Wisdom:</strong> Has 2 possible Soul rewards (e.g., Horomachistry gives Fet OR Phost)</li>
+            <li><strong>Preview before:</strong> Hover over Wisdom to see which Soul you'll get</li>
+            <li><strong>Limited uses:</strong> 9 Wisdom slots → max 9 new Souls (can evolve existing ones too)</li>
+            <li><strong>Strategy:</strong> Use early on Wisdoms for key soul types. Defer others to late-game</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE MAP -->
+    <div id="map" class="mode-content">
+      <div class="help-section">
+        <h2>🗺️ Interactive Map</h2>
+        <p>Hover for quick info. Click boxes to see details.</p>
+        
+        <div class="era-legend">
+          <div class="legend-item"><div class="legend-color" style="background: #d4af99;"></div> Exterior/Lodge</div>
+          <div class="legend-item"><div class="legend-color" style="background: #f4e4c1;"></div> Solar Gothic</div>
+          <div class="legend-item"><div class="legend-color" style="background: #e8b4d4;"></div> Baronial</div>
+          <div class="legend-item"><div class="legend-color" style="background: #b4d4e8;"></div> Curia</div>
+          <div class="legend-item"><div class="legend-color" style="background: #d4b4e8;"></div> Nocturnal</div>
+          <div class="legend-item"><div class="legend-color" style="background: #c1e8b4;"></div> Open Air</div>
+        </div>
+
+        <svg class="map" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#eee" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="1200" height="700" fill="url(#grid)" />
+
+          <!-- Rooms -->
+          <rect class="room-box" x="50" y="300" width="80" height="60" fill="#d4af99" stroke="#999" stroke-width="2" onclick="alert('Watchman\'s Tower: Gatehouse\nUnlock: Free')" onmouseover="showTooltip(event, 'Gatehouse', 'Free')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="90" y="335">Gatehouse</text>
+
+          <rect class="room-box" x="200" y="100" width="80" height="70" fill="#e8b4d4" stroke="#999" stroke-width="2" onclick="alert('Motley Tower: Dispensary\nUnlock: 6 Heart OR 6 Moth')" onmouseover="showTooltip(event, 'Dispensary', '6 Heart OR 6 Moth')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="240" y="140">Dispensary</text>
+
+          <rect class="room-box" x="350" y="250" width="80" height="70" fill="#e8b4d4" stroke="#999" stroke-width="2" onclick="alert('Kitchen\nUnlock: 7 Nectar OR 7 Forge')" onmouseover="showTooltip(event, 'Kitchen', '7 Nectar OR 7 Forge')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="390" y="290">Kitchen</text>
+
+          <rect class="room-box" x="500" y="250" width="80" height="70" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('The Well\nUnlock: 7 Nectar')" onmouseover="showTooltip(event, 'The Well', '7 Nectar')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="540" y="290">Well</text>
+
+          <rect class="room-box" x="600" y="150" width="80" height="100" fill="#b4d4e8" stroke="#999" stroke-width="2" onclick="alert('Reading Room\nUnlock: 8 Lantern OR 8 Sky')" onmouseover="showTooltip(event, 'Reading Room', '8 Lantern OR 8 Sky')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="640" y="205">Reading Rm</text>
+
+          <rect class="room-box" x="750" y="150" width="80" height="70" fill="#f4e4c1" stroke="#999" stroke-width="2" onclick="alert('Solar Temple\nUnlock: 12 Sky OR 12 Lantern')" onmouseover="showTooltip(event, 'Solar Temple', '12 Sky OR 12 Lantern')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="790" y="190">Solar Temple</text>
+
+          <rect class="room-box" x="300" y="450" width="70" height="60" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('Scent Garden\nUnlock: Free')" onmouseover="showTooltip(event, 'Scent Garden', 'Free')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="335" y="485">Scent Gdn</text>
+
+          <rect class="room-box" x="450" y="450" width="70" height="60" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('Practic Garden\nUnlock: Free')" onmouseover="showTooltip(event, 'Practic Garden', 'Free')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="485" y="485">Practic Gdn</text>
+
+          <rect class="room-box" x="900" y="200" width="80" height="70" fill="#d4b4e8" stroke="#999" stroke-width="2" onclick="alert('The Gaol\nUnlock: 16 Knock (various)')" onmouseover="showTooltip(event, 'The Gaol', '16 Knock (various)')" onmouseout="hideTooltip()"/>
+          <text class="room-label" x="940" y="240">Gaol</text>
+
+          <text x="50" y="680" font-size="12" fill="#666">Click rooms for details • See Rooms tab for complete 40+ room catalog</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- THE ROUTE -->
+    <div id="route" class="mode-content active">
+      <div class="help-section">
+        <h2>🎮 The Route: Progression Guide</h2>
+        <p style="margin-bottom: 1rem;">Optimized path through Book of Hours in 3 phases. No time limits—you control pacing.</p>
+
+        <div class="phase">
+          <strong>PHASE 1: BOOTSTRAP (Days 1–3)</strong>
+          <p><em>Goal: 3 guaranteed skills, 6–8 early rooms, renewable resources.</em></p>
+          <ul>
+            <li><strong>Day 1 – Morning:</strong> Read Journal twice at any desk (Lantern desk preferred). First read = any memory, second read = match aspect.</li>
+            <li><strong>Day 1 – Midday:</strong> Go to Motley Tower: Dispensary (6 Heart OR 6 Moth). Catalog all books. Get 3 guaranteed: Perugian, Bark, Locksmith.</li>
+            <li><strong>Day 1 – Afternoon:</strong> Read all 3 books at Eva Desk. Each gives Lesson → Skill: Strings & Songs, Edicts Inviolable, Watchman's Paradoxes.</li>
+            <li><strong>Day 1 – Evening:</strong> Unlock Kitchen (7 Nectar OR 7 Forge) + Well (7 Nectar).</li>
+            <li><strong>Day 2:</strong> Unlock Reading Room (8 Lantern OR 8 Sky).</li>
+            <li><strong>Key Resources:</strong> Weather is free daily (2–3 aspects). Isle-Water unlimited. Re-read guaranteed books for free Memories daily.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <strong>PHASE 2: EXPANSION (Days 4–15)</strong>
+          <p><em>Goal: Curia/Solar Temple, first crafting chains, 22 guaranteed Memories.</em></p>
+          <ul>
+            <li><strong>Days 4–6:</strong> Level core skills to lv3–4. Unlock Grand Ascent (10 various).</li>
+            <li><strong>Days 7–9:</strong> Unlock Solar Temple (12 Sky OR 12 Lantern) + Alchemist's Glassware (10 Forge OR 10 Winter).</li>
+            <li><strong>Days 10–12:</strong> Start crafting: Amethyst Ampoule (5 Knock), basic Forge items.</li>
+            <li><strong>Days 13–15:</strong> Hire first assistant. Unlock Gaol entrance or first Curia room.</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <strong>PHASE 3: MASTERY (Days 16+)</strong>
+          <p><em>Goal: Persistent Memories, unlock 80% of house, endgame (History writing).</em></p>
+          <ul>
+            <li><strong>Persistent Memories (critical):</strong> Wormwood Dream (hardest recipe), Wind-in-Waiting (easiest), Curious Hunch</li>
+            <li><strong>Ink Chains:</strong> Uzult, Marakat, Nillycant, Porphyrine, Orpiment—each needs 15-aspect recipe + ingredient</li>
+            <li><strong>Unlock Gaol/Caverns:</strong> Highest rooms (15–17 aspects). One per day max.</li>
+            <li><strong>Find Numen Books:</strong> Hidden in vaults. Give 5-Principle Memories (game-changer).</li>
+            <li><strong>Writing History:</strong> Journal requires Numen (5 aspect) + Inks (3 different) + 25 of one Principle total.</li>
+          </ul>
+        </div>
+
+        <div class="alert">
+          <strong>⚠️ Early Game Notes:</strong><br>
+          • Don't reply to Rhonwen letter early (keeps books safe from contamination)<br>
+          • Weather is FREE every day. Use it!<br>
+          • Tools are FREE and reusable. Hoard in one room<br>
+          • One room per assistant per day (even with multiple assistants)<br>
+          • You can only have one of each Memory at once (disappears at dawn if not used)
+        </div>
+      </div>
+    </div>
+
+    <!-- ROOMS -->
     <div id="rooms" class="mode-content">
       <div class="search-container">
-        <input type="text" id="rooms-search" placeholder="Search rooms (e.g., 'Dispensary', 'Lantern', 'priority')" onkeyup="searchRooms()">
+        <input type="text" id="rooms-search" placeholder="Search rooms (e.g., 'Dispensary', 'Kitchen', 'Lantern')" onkeyup="searchRooms()">
       </div>
-      <svg id="hushHouseMap" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="results" id="rooms-results"></div>
     </div>
 
+    <!-- WORKSTATIONS -->
     <div id="workstations" class="mode-content">
       <div class="search-container">
-        <input type="text" id="workstations-search" placeholder="Search workstations (e.g., 'Solar Altar', 'Desk', 'crafting')" onkeyup="searchWorkstations()">
+        <input type="text" id="workstations-search" placeholder="Search workstations (e.g., 'Telescope', 'Kitchen Range')" onkeyup="searchWorkstations()">
       </div>
       <div class="results" id="workstations-results"></div>
     </div>
 
+    <!-- CRAFTING -->
+    <div id="crafting" class="mode-content">
+      <div class="help-section">
+        <h2>⚙️ Crafting Chains: The 5 Inks</h2>
+        
+        <h3>Uzult (Lantern: 15 Lantern + 15 Moth + 15 Sky)</h3>
+        <div class="crafting-chain">
+Step 1 (10 Lantern): Watchman's Paradoxes (lv2) @ Solar Altar<br>
+  → Elegant Sunburst Lamp + 2x Lantern Memory + 2x Phost + 2x Glass<br>
+  = Xanthotic Essence<br>
+<br>
+Step 2 (15 Lantern): Watchman's Paradoxes (lv4) @ Solar Altar<br>
+  → Xanthotic Essence + 3x Lantern Memory + 3x Elegant Sunburst Lamp<br>
+  = Uzult (Lantern Ink)
+        </div>
+
+        <h3>Marakat (Nectar: 15 Nectar + 15 Grail + 15 Knock)</h3>
+        <div class="crafting-chain">
+Step 1 (10 Nectar): Drums & Dances (lv1) @ Kitchen Range<br>
+  → 2x Insect & Nectars + Nectar Memory + Leathy<br>
+<br>
+Step 2 (15 Nectar): Drums & Dances (lv4) @ Kitchen Range<br>
+  → Leathy + 4x Insect & Nectars + 2x Nectar Memory<br>
+  = Marakat (Nectar Ink)
+        </div>
+
+        <h3>Nillycant (Winter: 15 Winter + 15 Edge + 15 Scale)</h3>
+        <div class="crafting-chain">
+Step 1 (10 Winter): Sights & Sensations (lv1) @ Alchemist's Glassware<br>
+  → 2x Flower + Winter Memory + Solomon's Preparation<br>
+  (Solomon's Prep = 10 Winter, Flowers, Drink, Winter Memory @ Kitchen)<br>
+<br>
+Step 2 (15 Winter): Sights & Sensations (lv4) @ Alchemist's Glassware<br>
+  → Solomon's Preparation + 4x Flower + 2x Winter Memory<br>
+  = Nillycant (Winter Ink)
+        </div>
+
+        <h3>Porphyrine (Rose: 15 Rose + 15 Moon + 15 Knock)</h3>
+        <div class="crafting-chain">
+Step 1 (10 Rose): Inks of Revelation (lv2) @ Desk<br>
+  → Light-based items (Mirrors, Stained Glass)<br>
+  = Ichor Auroral (10 Rose)<br>
+<br>
+Step 2 (15 Rose): Inks of Power (lv4) @ Desk<br>
+  → Ichor Auroral + 2x Rose Memory<br>
+  = Porphyrine (Rose Ink)
+        </div>
+
+        <h3>Orpiment Exultant (Forge: 15 Forge + 15 Heart + 15 Sky)</h3>
+        <div class="crafting-chain">
+Step 1 (10 Forge): Anbary & Lapidary (lv2) @ Alchemist's Glassware<br>
+  → 2x Mettle + 2x Forge Memory + 2x Honeyscar Jasmine + 2x Veiled Goddess Lapsang<br>
+  = Iotic Essence<br>
+<br>
+Step 2 (15 Forge): Anbary & Lapidary (lv4) @ Alchemist's Glassware<br>
+  → Iotic Essence + 4x Mettle + 2x Forge Memory + 2x Honeyscar Jasmine<br>
+  = Orpiment Exultant (Forge Ink)
+        </div>
+
+        <h3>Persistent Memories (Crafted, Don't Fade)</h3>
+        <div class="crafting-chain">
+Wormwood Dream (10 Moon + 10 Winter + 3 Edge):<br>
+  Telescope + Edicts Martial (lv3) + Lunar Globe + 2x Moon Memory + Trist<br>
+  = HARDEST recipe, only way to get 10 Moon + 10 Winter combo<br>
+<br>
+Wind-in-Waiting (6 Sky + 3 Moth + 3 Grail + 3 Scale):<br>
+  Telescope + Strings & Songs (lv5) + 2x Mazarine Fife<br>
+  = Easiest 6-Principle persistent memory<br>
+<br>
+Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
+  Foundry + Preliminal Meter (lv1) + 2x Amethyst Ampoule
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKS -->
     <div id="books" class="mode-content">
       <div class="search-container">
-        <input type="text" id="books-search" placeholder="Search books (e.g., 'Perugian', 'mystery 4', 'Heart')" onkeyup="searchBooks()">
+        <input type="text" id="books-search" placeholder="Search books (e.g., 'Perugian', 'mystery 4')" onkeyup="searchBooks()">
       </div>
       <div class="results" id="books-results"></div>
     </div>
 
-    <div id="recipes" class="mode-content">
-      <div class="search-container">
-        <input type="text" id="recipes-search" placeholder="Search recipes (e.g., 'Amethyst', 'Wormwood', 'Ink')" onkeyup="searchRecipes()">
-      </div>
-      <div class="results" id="recipes-results"></div>
-    </div>
-
-    <div id="memories" class="mode-content">
-      <div class="search-container">
-        <input type="text" id="memories-search" placeholder="Search memories (e.g., 'Wormwood', 'Moon', 'persistent')" onkeyup="searchMemories()">
-      </div>
-      <div class="results" id="memories-results"></div>
-    </div>
-
+    <!-- SKILLS -->
     <div id="skills" class="mode-content">
       <div class="search-container">
-        <input type="text" id="skills-search" placeholder="Search skills (e.g., 'Edicts Martial', 'Knock')" onkeyup="searchSkills()">
+        <input type="text" id="skills-search" placeholder="Search skills (e.g., 'Strings & Songs', 'Moon')" onkeyup="searchSkills()">
       </div>
       <div class="results" id="skills-results"></div>
     </div>
-
-    <div id="items" class="mode-content">
-      <div class="search-container">
-        <input type="text" id="items-search" placeholder="Search items (e.g., 'Mazarine Fife', 'Lantern')" onkeyup="searchItems()">
-      </div>
-      <div class="results" id="items-results"></div>
-    </div>
-
-    <div class="detail-panel" id="detailPanel">
-      <div class="detail-panel-header">
-        <h2 id="panelTitle">Room Details</h2>
-        <button class="detail-panel-close" onclick="closeDetailPanel()">×</button>
-      </div>
-      <div class="detail-panel-content" id="panelContent"></div>
-    </div>
   </div>
 
-  <script>
-    let currentMode = 'help';
+  <div class="room-tooltip" id="tooltip"></div>
 
+  <script>
     const database = {
       rooms: [
-        { name: 'Motley Tower: Dispensary', unlock: '6 Knock OR 6 Lantern', contents: 'Books (3 guaranteed), Crafting materials', priority: 1, notes: 'FIRST PRIORITY. Catalog all books here to get Perugian Diaries, What Does Not Bark, Locksmith\'s Dream—3 essential skills guaranteed.' },
-        { name: 'Kitchen', unlock: '7 Nectar OR 7 Forge', contents: 'Food, Drinks, Kitchen Range workstation', priority: 1, notes: 'Second priority. Unlimited food source and essential for Nectar/Forge crafting.' },
-        { name: 'The Well', unlock: '7 Nectar', contents: 'Isle-Water (unlimited free drink), Mist-Kissed Water (Numa season)', priority: 1, notes: 'Unlimited renewable drink. Critical for boosting assistants and curing maladies.' },
-        { name: 'Reading Room', unlock: '8 Lantern OR 8 Sky', contents: '30+ book shelves, optimal library HQ', priority: 2, notes: 'Best room for organizing books. Make this your library center.' },
-        { name: 'Grand Ascent', unlock: '10 various principles', contents: 'Spintria (learn languages), Reading Room access', priority: 2, notes: 'Gateway to many areas. Get a Spintria early to learn languages from visitors.' },
-        { name: 'Solar Temple (Nave of Abbey Church)', unlock: '12 Sky OR 12 Lantern', contents: 'Solar Altar workstation (essential for Sky/Lantern crafting)', priority: 2, notes: 'Critical for Mazarine Fife and Numen book crafting.' },
-        { name: 'Alchemist\'s Glassware (Fludd Gallery)', unlock: '10 Forge OR 10 Winter', contents: 'Winter crafting workstation, materials', priority: 2, notes: 'Go-to for Winter and Forge recipes. Essential mid-game.' },
-        { name: 'Foundry', unlock: '10 Forge OR 10 Knock', contents: 'Foundry workstation (Knock/Forge crafting)', priority: 2, notes: 'Critical for Knockworks & Clockworks chain (Gervinite, Chronsichord).' },
-        { name: 'Curia', unlock: '14 Moon OR 14 Edge', contents: 'Late-game books, connects to Gaol', priority: 3, notes: 'Unlocks access to Gaol (prison rooms). Mid-game gateway.' },
-        { name: 'The Gaol (Prison)', unlock: '16 Knock (various)', contents: 'Hidden rooms, Chronsichord use, late-game books', priority: 3, notes: 'Highest-level rooms in the House. Chronsichord (6 Knock) unlocks many here.' },
-        { name: 'Sisterhood of the Knot (Caves)', unlock: '15-17 scale/rose/various', contents: 'Numen books (hidden), Scale rooms, endgame content', priority: 3, notes: 'Some Numen books here. Hard to unlock but worth it.' }
+        { name: 'Watchman\'s Tower: Gatehouse', unlock: 'Free', workstations: 'Desk', priority: 1, contents: 'Eva Desk (starting point)' },
+        { name: 'Motley Tower: Dispensary', unlock: '6 Heart OR 6 Moth', workstations: 'Dispensary', priority: 1, contents: '3 guaranteed books (Perugian, Bark, Locksmith)' },
+        { name: 'Motley Tower: Regensburg Room', unlock: '6 Heart OR 6 Sky', workstations: 'Desk, Bed', priority: 2, contents: 'Books, hidden items' },
+        { name: 'Kitchen', unlock: '7 Nectar OR 7 Forge', workstations: 'Kitchen Range', priority: 1, contents: 'Food, drinks, Kitchen Range (essential)' },
+        { name: 'Pantry', unlock: 'Via Kitchen', workstations: 'Kitchen Range', priority: 1, contents: 'More food/drinks' },
+        { name: 'The Well', unlock: '7 Nectar', workstations: 'Gathering', priority: 1, contents: 'Unlimited Isle-Water' },
+        { name: 'Well Descent', unlock: '8 Moon OR 8 Nectar OR 8 Scale', workstations: 'None', priority: 2, contents: 'Path down, tools' },
+        { name: 'Deep Well Descent', unlock: '9 Heart OR 9 Nectar OR 9 Scale', workstations: 'None', priority: 3, contents: 'Lower levels' },
+        { name: 'Reading Room', unlock: '8 Lantern OR 8 Sky', workstations: 'Multiple desks', priority: 2, contents: '30+ shelves (library HQ)' },
+        { name: 'Solar Temple (Nave)', unlock: '12 Sky OR 12 Lantern', workstations: 'Solar Altar', priority: 2, contents: 'Solar Altar (Sky/Lantern crafting)' },
+        { name: 'Alchemist\'s Glassware', unlock: '10 Forge OR 10 Winter', workstations: 'Alchemist\'s Glassware', priority: 2, contents: 'Winter crafting HQ' },
+        { name: 'Foundry', unlock: '10 Forge OR 10 Knock', workstations: 'Foundry', priority: 2, contents: 'Knock/Forge crafting' },
+        { name: 'Scent Garden', unlock: 'Free', workstations: 'Gathering', priority: 1, contents: 'Herbs, flowers (seasonal)' },
+        { name: 'Practic Garden', unlock: 'Free', workstations: 'Dummy (evolution)', priority: 1, contents: 'Pear trees, soul evolution dummy' },
+        { name: 'Infirmary', unlock: 'Via Kitchen path', workstations: 'Beds', priority: 2, contents: 'Beds, beverages' },
+        { name: 'Examination Room', unlock: 'Via Infirmary', workstations: 'Necropsy Table', priority: 2, contents: 'Only place for carcass recipes' },
+        { name: 'Patients\' Lounge', unlock: 'Via Examination', workstations: 'Projector', priority: 2, contents: 'Film reel reading' },
+        { name: 'Servants\' Hall', unlock: 'Via Kitchen', workstations: 'Piano, Loom', priority: 2, contents: 'Bronze Knife (tool), Piano' },
+        { name: 'Grand Ascent (Ground Floor)', unlock: '10 various', workstations: 'None', priority: 2, contents: 'Central artery, Spintria' },
+        { name: 'Chancel of Abbey Church', unlock: '9 Heart OR 9 Lantern OR 9 Moon OR 9 Winter', workstations: 'Shrine', priority: 2, contents: '77 candles, Meniscate Shrine' },
+        { name: 'Radiant Stair', unlock: '6 Edge OR 6 Forge OR 6 Knock OR 6 Lantern', workstations: 'Shrine (Watchman)', priority: 2, contents: 'Mirror shards, Watchman Shrine' },
+        { name: 'Duelling Hall', unlock: '8 Edge OR 8 Grail', workstations: 'Workbench', priority: 2, contents: 'Wall weapons, wood/fabric crafting' },
+        { name: 'Violet Chamber', unlock: '6 Knock OR 6 Scale', workstations: 'Bed', priority: 2, contents: 'Knock-aligned bed' },
+        { name: 'Pale Chamber', unlock: '7 Moth OR 7 Winter', workstations: 'Bed', priority: 2, contents: 'Sky-aligned bed' },
+        { name: 'The Gaol', unlock: '16 Knock (various)', workstations: 'Multiple', priority: 3, contents: 'Highest-level rooms, Numen books' },
+        { name: 'Sisterhood Caverns', unlock: '15–17 Scale/Rose', workstations: 'Shrines', priority: 3, contents: 'Numen books, Scale rooms' },
       ],
       workstations: [
-        { name: 'Desk (Reading)', type: 'Core', location: 'Throughout house (Librarian\'s Quarters, Reading Room, etc)', function: 'Read books, slot Skill+Soul+Memory+Tool/Ink', recipes: 'All book reading happens here' },
-        { name: 'Solar Altar', type: 'Crafting', location: 'Nave of Abbey Church', function: 'Craft Sky and Lantern items', recipes: 'Mazarine Fife (10 Sky), Uzult Ink (15 Lantern), Ascendant Harmony (10 Sky)', notes: 'Essential for late-game Sky crafting.' },
-        { name: 'Kitchen Range', type: 'Crafting', location: 'Kitchen, Pantry, Servants\' Hall', function: 'Craft food, drinks, meals', recipes: 'Leathy (10 Nectar), Sacrament Malachite (15 Nectar), Marakat Ink (15 Nectar)', notes: 'Slots: Skill + Health + Memories + 2 Ingredients (Food/Beverage/Leaf/Flower)' },
-        { name: 'Foundry', type: 'Crafting', location: 'Below Kitchen', function: 'Craft metal/forge items', recipes: 'Gervinite (10 Knock), Iotic Essence (10 Forge)', notes: 'Essential for Knock crafting chain.' },
-        { name: 'Alchemist\'s Glassware', type: 'Crafting', location: 'Fludd Gallery', function: 'Craft winter/glass items', recipes: 'Orpiment Exultant Ink (15 Forge), Solomon\'s Preparation (10 Winter)', notes: 'Go-to for Winter recipes.' },
-        { name: 'Telescope', type: 'Crafting', location: 'Watchtower/Observatory', function: 'Craft memories with 2 tool slots', recipes: 'Wormwood Dream (10 Moon), Wind-in-Waiting (15 Sky)', notes: 'Unique: accepts 2 tools (like Mazarine Fife x2). Essential for persistent memories.' },
-        { name: 'Dispensary', type: 'Crafting', location: 'Motley Tower 2nd floor', function: 'Craft alchemic items, pigments', recipes: 'Swaddled Thunder (15 Heart), Uzult Ink prerequisite', notes: 'Where to catalog guaranteed books.' },
-        { name: 'Necropsy Table', type: 'Crafting', location: 'Deep library', function: 'Craft meat/scale items', recipes: 'Essential Periost (10 Moon), Hive\'s Lament (10 Nectar)', notes: 'Only place for meat-based recipes.' },
-        { name: 'Bed', type: 'Recovery', location: 'Multiple rooms (Librarian\'s Quarters, etc)', function: 'Rest fatigued Soul cards, cure afflictions', recipes: 'Recovery uses Drink + Bed aspect matching', notes: 'Each bed requires a specific Principle to occupy.' },
-        { name: 'Shrine/Altar', type: 'Ritual', location: 'Solar Temple, Chancel, Shrines', function: 'Interact with numinous items, crafted memories', recipes: 'Numen book reading, special rituals', notes: 'Slots: Soul + Memory + optional second items' },
-        { name: 'Gathering Points', type: 'Resource', location: 'Gardens, forest, outdoor areas', function: 'Gather seasonal plants, flowers, food', recipes: 'Pyrus Auricalcinus (Numa), Honeyscar Jasmine (Autumn), Blue Crown (Spring/Winter)', notes: 'Only during specific seasons. Essential for mid-game boosters.' }
+        { name: 'Desk (Generic)', type: 'Core', accepts: 'Books, Soul + Memory + Skill', uses: 'Read books, match mysteries' },
+        { name: 'Kitchen Range', type: 'Crafting', accepts: 'Skill + Soul + 2 Ingredients + Kitchenware', uses: 'Food, drinks, Marakat chain' },
+        { name: 'Solar Altar', type: 'Crafting', accepts: 'Skill + Soul + Memory + 2 Tools', uses: 'Sky/Lantern inks, Mazarine' },
+        { name: 'Foundry', type: 'Crafting', accepts: 'Skill + Soul + Memory + Metal', uses: 'Knock/Forge (Gervinite chain)' },
+        { name: 'Alchemist\'s Glassware', type: 'Crafting', accepts: 'Skill + Soul + Memory + Ingredients', uses: 'Winter recipes (Nillycant ink)' },
+        { name: 'Telescope', type: 'Crafting', accepts: 'Skill + Soul + 2 Memories OR 2 Tools', uses: 'Persistent memories (Wormwood, Wind-in-Waiting)' },
+        { name: 'Dispensary', type: 'Crafting', accepts: 'Skill + Soul + Pigment/Alchemic', uses: 'Alchemic items' },
+        { name: 'Necropsy Table', type: 'Crafting', accepts: 'Skill + Soul + Remains + Ingredients', uses: 'Meat recipes, Scale items' },
+        { name: 'Bed (Various)', type: 'Recovery', accepts: 'Soul + Drink', uses: 'Sleep, heal fatigued/maladied souls' },
+        { name: 'Shrine (Multiple)', type: 'Evolution', accepts: 'Soul + Skill + Memory', uses: 'Soul evolution (Wisdom slots)' },
+        { name: 'Practic Garden Dummy', type: 'Evolution', accepts: 'Soul + Skill (Illumination)', uses: 'Soul evolution (Martial Wisdom)' },
+        { name: 'Gathering Points', type: 'Resource', accepts: 'Soul', uses: 'Gather plants, flowers (seasonal)' },
       ],
       books: [
-        { name: 'Perugian Diaries', mystery: 4, principles: {Sky: 2, Heart: 1}, skill: 'Strings & Songs', memory: 'Solace', source: 'Dispensary (guaranteed)', notes: 'START HERE. Early access to music crafting and Swaddled Thunder.' },
-        { name: 'What Does Not Bark', mystery: 5, principles: {Knock: 2, Winter: 1}, skill: 'Edicts Inviolable', source: 'Dispensary (guaranteed)', notes: 'Early Knock skill. Good starter.' },
-        { name: 'The Locksmith\'s Dream vol.4', mystery: 6, principles: {Knock: 2, Sky: 1}, skill: 'Watchman\'s Paradoxes', source: 'Dispensary (guaranteed)', notes: 'Essential for Lantern Ink later.' },
-        { name: 'Prophecies of Glory', mystery: 12, principles: {Sky: 3, Lantern: 2}, skill: 'Sky Stories', source: 'House library', notes: 'This is what you tried to read. TOO HARD. Skip it for 10+ days.' },
-        { name: 'An Exorcist\'s Field Manual', mystery: 4, principles: {Moon: 2, Edge: 1}, skill: 'Edicts Martial', source: 'First Nocturnal book (save/reload)', notes: 'OVERPOWERED. Most powerful skill. Try to get this early via save/reload.' },
-        { name: 'Rapt in the King', mystery: 6, principles: {Heart: 2, Nectar: 1}, skill: 'Drums & Dances', source: 'First Nocturnal book', notes: 'Only way to craft Swaddled Thunder and Hive\'s Lament early.' }
-      ],
-      memories: [
-        { name: 'Solace', principles: {Heart: 2, Sky: 1}, source: 'Book: Perugian Diaries', type: 'guaranteed', notes: 'Unlocked early. Use to level Heart/Sky skills.' },
-        { name: 'Impulse', principles: {Moth: 2, Nectar: 1}, source: 'Toss penny at Sea\'s Edge', type: 'quick', notes: 'Easy quick memory.' },
-        { name: 'Wormwood Dream', principles: {Moon: 6, Winter: 6, Edge: 3}, source: 'Craft: Telescope + Edicts Martial (lv3)', type: 'persistent', notes: 'ESSENTIAL for Moon/Winter. Hardest to craft but mandatory.' },
-        { name: 'Wind-in-Waiting', principles: {Sky: 6, Moth: 3, Grail: 3, Scale: 3}, source: 'Craft: Telescope + Strings & Songs + 2x Mazarine Fife', type: 'persistent', notes: 'Easiest 6-Principle memory. Sky power boost.' },
-        { name: 'Curious Hunch', principles: {Heart: 3, Knock: 4, Lantern: 3, Moth: 3}, source: 'Craft: Foundry + Preliminal Meter (lv1)', type: 'persistent', notes: 'Knock booster. Requires Amethyst Ampoule (2).' },
-        { name: 'Weather: Sunny', principles: {Lantern: 2}, source: 'Random weather (very common)', type: 'weather', notes: 'Happens often. Free Lantern boost every few days.' }
+        { name: 'Perugian Diaries', mystery: 4, lesson: 'Strings & Songs', memory: 'Solace', source: 'GUARANTEED (Dispensary)' },
+        { name: 'What Does Not Bark', mystery: 5, lesson: 'Edicts Inviolable', memory: 'Impulse', source: 'GUARANTEED (Dispensary)' },
+        { name: 'The Locksmith\'s Dream vol.4', mystery: 6, lesson: 'Watchman\'s Paradoxes', memory: 'Foresight', source: 'GUARANTEED (Dispensary)' },
+        { name: 'An Exorcist\'s Field Manual', mystery: 4, lesson: 'Edicts Martial (ESSENTIAL)', memory: 'Sorrow', source: 'Nocturnal (save/reload)' },
+        { name: '[281 total books in game]', mystery: '2–25', lesson: 'Various', memory: 'Various', source: 'See Vivi\'s spreadsheet' },
       ],
       skills: [
-        { name: 'Strings & Songs', principles: {Sky: 1, Heart: 1}, source: 'Perugian Diaries (guaranteed)', desc: 'Music crafting. Crafts Swaddled Thunder, Wind-in-Waiting, Thunderskin\'s Paean. Upgrade to lv5 for Swaddled Thunder.' },
-        { name: 'Edicts Martial', principles: {Moon: 1, Edge: 1}, source: 'An Exorcist\'s Field Manual (save/reload)', desc: 'THE skill for Moon/Winter. Only skill that makes Wormwood Dream (6 Winter). ESSENTIAL. Upgrade ASAP.' },
-        { name: 'Watchman\'s Paradoxes', principles: {Lantern: 1, Sky: 1}, source: 'Locksmith\'s Dream (guaranteed)', desc: 'Crafts Uzult (Lantern Ink). Essential late-game.' },
-        { name: 'Lockworks & Clockworks', principles: {Knock: 1, Sky: 1}, source: 'Unlock later (guaranteed)', desc: 'Only Knock skill. Crafts entire Amethyst→Gervinite→Chronsichord chain. MUST upgrade.' },
-        { name: 'Sights & Sensations', principles: {Sky: 1, Winter: 1}, source: 'Keeper\'s Lodge (guaranteed)', desc: 'Winter focus. Crafts Solomon\'s Preparation → Nillycant (Winter Ink). Upgrade to lv4.' }
+        { name: 'Strings & Songs', aspects: 'Sky 1, Heart 1', source: 'Perugian Diaries (GUARANTEED)', desc: 'Music crafting. Makes Swaddled Thunder, Wind-in-Waiting, Mazarine Fife.' },
+        { name: 'Edicts Inviolable', aspects: 'Knock 1, Winter 1', source: 'What Does Not Bark (GUARANTEED)', desc: 'Winter + Knock utility.' },
+        { name: 'Watchman\'s Paradoxes', aspects: 'Lantern 1, Sky 1', source: 'Locksmith\'s Dream (GUARANTEED)', desc: 'Makes Uzult (Lantern Ink). Essential late-game.' },
+        { name: 'Edicts Martial', aspects: 'Moon 1, Edge 1', source: 'An Exorcist\'s Field Manual (save/reload)', desc: 'ESSENTIAL for Moon/Winter. Only skill making Wormwood Dream. Upgrade ASAP.' },
+        { name: 'Sights & Sensations', aspects: 'Sky 1, Winter 1', source: 'Keeper\'s Lodge (guaranteed)', desc: 'Winter focus. Makes Solomon\'s Preparation → Nillycant.' },
+        { name: 'Anbary & Lapidary', aspects: 'Sky 1, Forge 1', source: 'Found in Fludd Gallery', desc: 'Forge crafting. Makes Iotic Essence → Orpiment Exultant.' },
+        { name: '[63 total skills in game]', aspects: 'Varies', source: 'From Lessons (reading books)', desc: 'See Hush House Compendium for complete skill list' },
       ],
-      recipes: [
-        { name: 'Amethyst Ampoule', input: 'Shapt (2), Memory: Salt (1), Glassblowing (2)', output: 'Knock 5', workstation: 'Any Desk', skill: 'Lockworks & Clockworks (lv1)', notes: 'Early Knock booster.' },
-        { name: 'Gervinite', input: 'Shapt (2), Knock Memory (2), Amethyst Ampoule (2)', output: 'Knock 10', workstation: 'Foundry', skill: 'Lockworks & Clockworks (lv1)', notes: 'First Knock item in chain.' },
-        { name: 'Wormwood Dream', input: 'Lunar Globe (1), Moon Memory (2), Trist (1)', output: 'Moon 10 (Persistent)', workstation: 'Telescope', skill: 'Edicts Martial (lv3)', notes: 'MANDATORY for Moon/Winter crafting.' },
-        { name: 'Uzult (Lantern Ink)', input: 'Elegant Sunburst Lamp (3), Lantern Memory (2), Phost (2)', output: 'Lantern 7, Moth 7, Sky 7', workstation: 'Solar Altar', skill: 'Watchman\'s Paradoxes (lv2)', notes: 'Late-game Ink for Lantern books.' }
-      ],
-      items: [
-        { name: 'Pyrus Auricalcinus', principles: {Forge: 4, Nectar: 4}, type: 'Food', source: 'Practic Garden (Numa season)', notes: 'Essential Nectar/Forge booster. Stock up during Numa.' },
-        { name: 'Isle-Water', principles: {Heart: 1, Moon: 1, Winter: 1}, type: 'Beverage', source: 'Well (unlimited)', notes: 'Cheap renewable drink. Use for any seasonal boosts.' },
-        { name: 'Mazarine Fife', principles: {Sky: 3}, type: 'Tool (Reusable)', source: 'Craft from Solar Altar (lv5 Sacra Limiae)', notes: 'Reusable Sky source. Need 2 for Wind-in-Waiting.' }
-      ]
     };
 
-    function renderCard(title, details) {
-      return `<div class="result-card"><div class="result-title">${title}</div><div class="result-detail">${details}</div></div>`;
+    function showTooltip(e, name, unlock) {
+      const tooltip = document.getElementById('tooltip');
+      tooltip.textContent = name + ' | ' + unlock;
+      tooltip.style.display = 'block';
+      tooltip.style.left = e.pageX + 10 + 'px';
+      tooltip.style.top = e.pageY + 10 + 'px';
+    }
+
+    function hideTooltip() {
+      document.getElementById('tooltip').style.display = 'none';
     }
 
     function searchRooms() {
       const query = document.getElementById('rooms-search').value.toLowerCase();
-      const results = database.rooms.filter(r => 
-        r.name.toLowerCase().includes(query) ||
-        r.unlock.toLowerCase().includes(query) ||
-        r.priority.toString() === query.replace('priority', '').trim() ||
-        r.contents.toLowerCase().includes(query)
+      const results = query === '' ? database.rooms : database.rooms.filter(r =>
+        r.name.toLowerCase().includes(query) || r.unlock.toLowerCase().includes(query) || r.contents.toLowerCase().includes(query)
       );
       let html = results.length === 0 
-        ? '<div class="no-results">No rooms found. Try searching by name or unlock requirement.</div>'
-        : results.map(r => renderCard(`${r.name}`, 
-          `<span class="tag">Priority ${r.priority}</span><br/>
-           <strong>Unlock:</strong> ${r.unlock}<br/>
-           <strong>Contains:</strong> ${r.contents}<br/>
-           <strong>Strategy:</strong> ${r.notes}`
-        )).join('');
+        ? '<div class="no-results">No rooms found.</div>'
+        : results.map(r => `<div class="result-card"><div class="result-title"><span class="priority-badge priority-${r.priority}">P${r.priority}</span>${r.name}</div><div class="result-detail"><strong>Unlock:</strong> ${r.unlock}<br/><strong>Workstations:</strong> ${r.workstations}<br/><strong>Contains:</strong> ${r.contents}</div></div>`).join('');
       document.getElementById('rooms-results').innerHTML = html;
     }
 
     function searchWorkstations() {
       const query = document.getElementById('workstations-search').value.toLowerCase();
-      const results = database.workstations.filter(w => 
-        w.name.toLowerCase().includes(query) ||
-        w.type.toLowerCase().includes(query) ||
-        w.function.toLowerCase().includes(query) ||
-        w.recipes.toLowerCase().includes(query)
+      const results = query === '' ? database.workstations : database.workstations.filter(w =>
+        w.name.toLowerCase().includes(query) || w.type.toLowerCase().includes(query)
       );
       let html = results.length === 0 
-        ? '<div class="no-results">No workstations found. Try by name or type.</div>'
-        : results.map(w => renderCard(w.name,
-          `<span class="tag">${w.type}</span><br/>
-           <strong>Location:</strong> ${w.location}<br/>
-           <strong>Function:</strong> ${w.function}<br/>
-           <strong>Recipes:</strong> ${w.recipes}<br/>
-           ${w.notes ? `<strong>Notes:</strong> ${w.notes}` : ''}`
-        )).join('');
+        ? '<div class="no-results">No workstations found.</div>'
+        : results.map(w => `<div class="result-card"><div class="result-title"><span class="tag">${w.type}</span>${w.name}</div><div class="result-detail"><strong>Accepts:</strong> ${w.accepts}<br/><strong>Uses:</strong> ${w.uses}</div></div>`).join('');
       document.getElementById('workstations-results').innerHTML = html;
     }
 
     function searchBooks() {
       const query = document.getElementById('books-search').value.toLowerCase();
-      const results = database.books.filter(b => 
-        b.name.toLowerCase().includes(query) ||
-        Object.keys(b.principles).some(p => p.toLowerCase().includes(query)) ||
-        String(b.mystery).includes(query)
+      const results = query === '' ? database.books.slice(0, 5) : database.books.filter(b =>
+        b.name.toLowerCase().includes(query) || String(b.mystery).includes(query)
       );
       let html = results.length === 0 
-        ? '<div class="no-results">No books found. Try by name or mystery level.</div>'
-        : results.map(b => renderCard(b.name, 
-          `<strong>Mystery:</strong> ${b.mystery} | <strong>Skill:</strong> ${b.skill}<br/>
-           <strong>Principles:</strong> ${Object.entries(b.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
-           <strong>Source:</strong> ${b.source}<br/>
-           <strong>Strategy:</strong> ${b.notes}`
-        )).join('');
+        ? '<div class="no-results">No books found.</div>'
+        : results.map(b => `<div class="result-card"><div class="result-title">${b.name}</div><div class="result-detail"><strong>Mystery:</strong> ${b.mystery}<br/><strong>Lesson:</strong> ${b.lesson}<br/><strong>Memory:</strong> ${b.memory}<br/><strong>Source:</strong> ${b.source}</div></div>`).join('');
       document.getElementById('books-results').innerHTML = html;
-    }
-
-    function searchRecipes() {
-      const query = document.getElementById('recipes-search').value.toLowerCase();
-      const results = database.recipes.filter(r => 
-        r.name.toLowerCase().includes(query) ||
-        r.skill.toLowerCase().includes(query) ||
-        r.output.toLowerCase().includes(query) ||
-        r.input.toLowerCase().includes(query)
-      );
-      let html = results.length === 0 
-        ? '<div class="no-results">No recipes found. Try by name or ingredient.</div>'
-        : results.map(r => renderCard(r.name,
-          `<strong>Skill:</strong> ${r.skill}<br/>
-           <strong>Workstation:</strong> ${r.workstation}<br/>
-           <strong>Input:</strong> ${r.input}<br/>
-           <strong>Output:</strong> ${r.output}<br/>
-           <strong>Strategy:</strong> ${r.notes}`
-        )).join('');
-      document.getElementById('recipes-results').innerHTML = html;
-    }
-
-    function searchMemories() {
-      const query = document.getElementById('memories-search').value.toLowerCase();
-      const results = database.memories.filter(m => 
-        m.name.toLowerCase().includes(query) ||
-        Object.keys(m.principles).some(p => p.toLowerCase().includes(query)) ||
-        m.source.toLowerCase().includes(query) ||
-        m.type.toLowerCase().includes(query)
-      );
-      let html = results.length === 0 
-        ? '<div class="no-results">No memories found. Try by name or principle.</div>'
-        : results.map(m => renderCard(m.name,
-          `<strong>Principles:</strong> ${Object.entries(m.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
-           <strong>Source:</strong> ${m.source}<br/>
-           <strong>Type:</strong> ${m.type}<br/>
-           <strong>Strategy:</strong> ${m.notes}`
-        )).join('');
-      document.getElementById('memories-results').innerHTML = html;
     }
 
     function searchSkills() {
       const query = document.getElementById('skills-search').value.toLowerCase();
-      const results = database.skills.filter(s => 
-        s.name.toLowerCase().includes(query) ||
-        Object.keys(s.principles).some(p => p.toLowerCase().includes(query)) ||
-        s.source.toLowerCase().includes(query) ||
-        s.desc.toLowerCase().includes(query)
+      const results = query === '' ? database.skills : database.skills.filter(s =>
+        s.name.toLowerCase().includes(query) || s.aspects.toLowerCase().includes(query)
       );
       let html = results.length === 0 
-        ? '<div class="no-results">No skills found. Try by name or principle.</div>'
-        : results.map(s => renderCard(s.name,
-          `<strong>Principles:</strong> ${Object.entries(s.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
-           <strong>Source:</strong> ${s.source}<br/>
-           <strong>Description:</strong> ${s.desc}`
-        )).join('');
+        ? '<div class="no-results">No skills found.</div>'
+        : results.map(s => `<div class="result-card"><div class="result-title">${s.name}</div><div class="result-detail"><strong>Aspects:</strong> ${s.aspects}<br/><strong>Source:</strong> ${s.source}<br/><strong>Effect:</strong> ${s.desc}</div></div>`).join('');
       document.getElementById('skills-results').innerHTML = html;
     }
 
-    function searchItems() {
-      const query = document.getElementById('items-search').value.toLowerCase();
-      const results = database.items.filter(i => 
-        i.name.toLowerCase().includes(query) ||
-        Object.keys(i.principles).some(p => p.toLowerCase().includes(query)) ||
-        i.source.toLowerCase().includes(query) ||
-        i.type.toLowerCase().includes(query)
-      );
-      let html = results.length === 0 
-        ? '<div class="no-results">No items found. Try by name or principle.</div>'
-        : results.map(i => renderCard(i.name,
-          `<strong>Type:</strong> ${i.type}<br/>
-           <strong>Principles:</strong> ${Object.entries(i.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
-           <strong>Source:</strong> ${i.source}<br/>
-           <strong>Strategy:</strong> ${i.notes}`
-        )).join('');
-      document.getElementById('items-results').innerHTML = html;
-    }
-
-    function initMap() {
-      const svg = document.getElementById('hushHouseMap');
-      if (svg.hasChildNodes()) return;
-      
-      const roomRects = [
-        { name: 'Motley Tower: Dispensary', x: 50, y: 100, width: 120, height: 100, priority: 1 },
-        { name: 'Kitchen', x: 250, y: 200, width: 130, height: 110, priority: 1 },
-        { name: 'The Well', x: 450, y: 250, width: 100, height: 90, priority: 1 },
-        { name: 'Reading Room', x: 650, y: 150, width: 140, height: 120, priority: 2 },
-        { name: 'Grand Ascent', x: 850, y: 100, width: 130, height: 130, priority: 2 },
-        { name: 'Solar Temple (Nave of Abbey Church)', x: 150, y: 350, width: 140, height: 110, priority: 2 },
-        { name: 'Alchemist\'s Glassware (Fludd Gallery)', x: 350, y: 400, width: 150, height: 100, priority: 2 },
-        { name: 'Foundry', x: 600, y: 350, width: 120, height: 100, priority: 2 },
-        { name: 'Curia', x: 800, y: 400, width: 130, height: 110, priority: 3 },
-        { name: 'The Gaol (Prison)', x: 100, y: 550, width: 140, height: 120, priority: 3 },
-        { name: 'Sisterhood of the Knot (Caves)', x: 350, y: 600, width: 150, height: 110, priority: 3 }
-      ];
-
-      const colors = { 1: '#c0392b', 2: '#f39c12', 3: '#3498db' };
-
-      roomRects.forEach((room, idx) => {
-        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rect.setAttribute('x', room.x);
-        rect.setAttribute('y', room.y);
-        rect.setAttribute('width', room.width);
-        rect.setAttribute('height', room.height);
-        rect.setAttribute('fill', colors[room.priority]);
-        rect.setAttribute('stroke', 'white');
-        rect.setAttribute('stroke-width', '2');
-        rect.setAttribute('rx', '4');
-        rect.setAttribute('opacity', '0.7');
-        rect.setAttribute('cursor', 'pointer');
-        rect.setAttribute('data-room-id', idx);
-        
-        rect.addEventListener('click', () => {
-          const dbRoom = database.rooms.find(r => r.name === room.name);
-          if (dbRoom) showDetailPanel(dbRoom);
-        });
-        
-        rect.addEventListener('mouseover', function() {
-          this.setAttribute('opacity', '1');
-          this.setAttribute('stroke-width', '3');
-        });
-        
-        rect.addEventListener('mouseout', function() {
-          this.setAttribute('opacity', '0.7');
-          this.setAttribute('stroke-width', '2');
-        });
-        
-        svg.appendChild(rect);
-
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', room.x + room.width / 2);
-        text.setAttribute('y', room.y + room.height / 2);
-        text.setAttribute('text-anchor', 'middle');
-        text.setAttribute('dominant-baseline', 'middle');
-        text.setAttribute('fill', 'white');
-        text.setAttribute('font-size', '11');
-        text.setAttribute('font-weight', 'bold');
-        text.setAttribute('pointer-events', 'none');
-        text.textContent = room.name.split('(')[0].trim().substring(0, 18);
-        svg.appendChild(text);
-      });
-
-      const legend = [
-        { color: '#c0392b', label: 'Priority 1', x: 50, y: 750 },
-        { color: '#f39c12', label: 'Priority 2', x: 350, y: 750 },
-        { color: '#3498db', label: 'Priority 3', x: 650, y: 750 }
-      ];
-
-      legend.forEach(item => {
-        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rect.setAttribute('x', item.x);
-        rect.setAttribute('y', item.y);
-        rect.setAttribute('width', '20');
-        rect.setAttribute('height', '20');
-        rect.setAttribute('fill', item.color);
-        rect.setAttribute('rx', '2');
-        svg.appendChild(rect);
-
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', item.x + 30);
-        text.setAttribute('y', item.y + 15);
-        text.setAttribute('font-size', '12');
-        text.setAttribute('fill', '#333');
-        text.textContent = item.label;
-        svg.appendChild(text);
-      });
-    }
-
-    function showDetailPanel(room) {
-      document.getElementById('panelTitle').textContent = room.name;
-      document.getElementById('panelContent').innerHTML = `
-        <div class="detail-section">
-          <h3>Unlock Requirement</h3>
-          <p>${room.unlock}</p>
-        </div>
-        <div class="detail-section">
-          <h3>Priority Tier</h3>
-          <p><span class="tag">Priority ${room.priority}</span></p>
-        </div>
-        <div class="detail-section">
-          <h3>Contents</h3>
-          <p>${room.contents}</p>
-        </div>
-        <div class="detail-section">
-          <h3>Strategy</h3>
-          <p>${room.notes}</p>
-        </div>
-      `;
-      document.getElementById('detailPanel').classList.add('open');
-    }
-
-    function closeDetailPanel() {
-      document.getElementById('detailPanel').classList.remove('open');
-    }
-
-    function initializeAllSearches() {
-      searchRooms();
-      searchWorkstations();
-      searchBooks();
-      searchRecipes();
-      searchMemories();
-      searchSkills();
-      searchItems();
-    }
-
-    window.addEventListener('load', () => {
-      initializeAllSearches();
-    });
-
     function switchMode(mode) {
-      currentMode = mode;
       document.querySelectorAll('.mode-content').forEach(el => el.classList.remove('active'));
       document.getElementById(mode).classList.add('active');
       document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
       event.target.classList.add('active');
-      
-      if (mode === 'rooms') {
-        setTimeout(() => initMap(), 100);
-      }
     }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      searchRooms();
+      searchWorkstations();
+      searchBooks();
+      searchSkills();
+    });
   </script>
 </body>
 </html>
