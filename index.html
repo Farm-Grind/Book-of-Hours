@@ -683,50 +683,50 @@
         
         <h3>Uzult (Lantern: 15 Lantern + 15 Moth + 15 Sky)</h3>
         <div class="crafting-chain">
-Step 1 (10 Lantern): Watchman's Paradoxes (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Solar Altar'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Solar Altar</a><br>
+Step 1 (10 Lantern): Watchman's Paradoxes (lv2) @ Solar Altar<br>
   → Elegant Sunburst Lamp + 2x Lantern Memory + 2x Phost + 2x Glass<br>
   = Xanthotic Essence<br>
 <br>
-Step 2 (15 Lantern): Watchman's Paradoxes (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Solar Altar'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Solar Altar</a><br>
+Step 2 (15 Lantern): Watchman's Paradoxes (lv4) @ Solar Altar<br>
   → Xanthotic Essence + 3x Lantern Memory + 3x Elegant Sunburst Lamp<br>
   = Uzult (Lantern Ink)
         </div>
 
         <h3>Marakat (Nectar: 15 Nectar + 15 Grail + 15 Knock)</h3>
         <div class="crafting-chain">
-Step 1 (10 Nectar): Drums & Dances (lv1) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen Range'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen Range</a><br>
+Step 1 (10 Nectar): Drums & Dances (lv1) @ Kitchen Range<br>
   → 2x Insect & Nectars + Nectar Memory + Leathy<br>
 <br>
-Step 2 (15 Nectar): Drums & Dances (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen Range'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen Range</a><br>
+Step 2 (15 Nectar): Drums & Dances (lv4) @ Kitchen Range<br>
   → Leathy + 4x Insect & Nectars + 2x Nectar Memory<br>
   = Marakat (Nectar Ink)
         </div>
 
         <h3>Nillycant (Winter: 15 Winter + 15 Edge + 15 Scale)</h3>
         <div class="crafting-chain">
-Step 1 (10 Winter): Sights & Sensations (lv1) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
+Step 1 (10 Winter): Sights & Sensations (lv1) @ Alchemist's Glassware<br>
   → 2x Flower + Winter Memory + Solomon's Preparation<br>
-  (Solomon's Prep = 10 Winter, Flowers, Drink, Winter Memory @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen</a>)<br>
+  (Solomon's Prep = 10 Winter, Flowers, Drink, Winter Memory @ Kitchen)<br>
 <br>
-Step 2 (15 Winter): Sights & Sensations (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
+Step 2 (15 Winter): Sights & Sensations (lv4) @ Alchemist's Glassware<br>
   → Solomon's Preparation + 4x Flower + 2x Winter Memory<br>
   = Nillycant (Winter Ink)
         </div>
 
         <h3>Porphyrine (Rose: 15 Rose + 15 Moon + 15 Knock)</h3>
         <div class="crafting-chain">
-Step 1 (10 Rose): Inks of Revelation (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Desk'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Desk</a><br>
+Step 1 (10 Rose): Inks of Revelation (lv2) @ Desk<br>
   → Light-based items (Mirrors, Stained Glass)<br>
   = Ichor Auroral (10 Rose)<br>
 <br>
-Step 2 (15 Rose): Inks of Power (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Desk'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Desk</a><br>
+Step 2 (15 Rose): Inks of Power (lv4) @ Desk<br>
   → Ichor Auroral + 2x Rose Memory<br>
   = Porphyrine (Rose Ink)
         </div>
 
         <h3>Orpiment Exultant (Forge: 15 Forge + 15 Heart + 15 Sky)</h3>
         <div class="crafting-chain">
-Step 1 (10 Forge): Anbary & Lapidary (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
+Step 1 (10 Forge): Anbary & Lapidary (lv2) @ Alchemist's Glassware<br>
   → 2x Mettle + 2x Forge Memory + 2x Honeyscar Jasmine + 2x Veiled Goddess Lapsang<br>
   = Iotic Essence<br>
 <br>
@@ -1121,7 +1121,83 @@ Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
       searchWorkstations();
       searchBooks();
       searchSkills();
+      // Linkify all content sections
+      linkifyAllContent();
     });
+
+    function linkifyAllContent() {
+      // Process Route section
+      const routeSection = document.getElementById('route');
+      if (routeSection) {
+        linkifyElement(routeSection);
+      }
+      // Process Mechanics section
+      const mechSection = document.getElementById('mechanics');
+      if (mechSection) {
+        linkifyElement(mechSection);
+      }
+      // Process Crafting section
+      const craftingSection = document.getElementById('crafting');
+      if (craftingSection) {
+        linkifyElement(craftingSection);
+      }
+    }
+
+    function linkifyElement(element) {
+      const walker = document.createTreeWalker(
+        element,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+
+      const nodesToReplace = [];
+      let node;
+      while (node = walker.nextNode()) {
+        nodesToReplace.push(node);
+      }
+
+      nodesToReplace.forEach(textNode => {
+        let html = textNode.textContent;
+        let modified = false;
+
+        // Linkify workstations
+        const workstations = ['Desk', 'Kitchen Range', 'Solar Altar', 'Foundry', 'Alchemist\'s Glassware', 'Telescope', 'Dispensary', 'Necropsy Table', 'Kitchen', 'Practic Garden', 'Scent Garden'];
+        workstations.forEach(ws => {
+          const regex = new RegExp(`\\b${ws}\\b`, 'g');
+          if (regex.test(html)) {
+            html = html.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('workstations', '${ws}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${ws}</a>`);
+            modified = true;
+          }
+        });
+
+        // Linkify skills
+        const skills = ['Strings & Songs', 'Edicts Inviolable', 'Watchman\'s Paradoxes', 'Edicts Martial', 'Sights & Sensations', 'Anbary & Lapidary', 'Drums & Dances'];
+        skills.forEach(skill => {
+          const regex = new RegExp(`\\b${skill}\\b`, 'g');
+          if (regex.test(html)) {
+            html = html.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('skills', '${skill}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${skill}</a>`);
+            modified = true;
+          }
+        });
+
+        // Linkify rooms
+        const rooms = ['Gatehouse', 'Dispensary', 'Reading Room', 'Solar Temple', 'Alchemist\'s Glassware', 'Gaol', 'Caverns'];
+        rooms.forEach(room => {
+          const regex = new RegExp(`\\b${room}\\b`, 'g');
+          if (regex.test(html)) {
+            html = html.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('rooms', '${room}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${room}</a>`);
+            modified = true;
+          }
+        });
+
+        if (modified) {
+          const span = document.createElement('span');
+          span.innerHTML = html;
+          textNode.parentNode.replaceChild(span, textNode);
+        }
+      });
+    }
   </script>
 </body>
 </html>
