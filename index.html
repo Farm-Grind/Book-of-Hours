@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book of Hours Database</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #2c3e50 0%, #3d566e 100%);
+      color: white;
+      padding: 2rem 1rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    
+    .mode-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .mode-btn {
+      padding: 0.75rem 1.25rem;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .mode-btn:hover {
+      color: #333;
+    }
+    
+    .mode-btn.active {
+      color: #2c3e50;
+      border-bottom-color: #2c3e50;
+    }
+    
+    .search-container {
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-container input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    
+    .search-container input:focus {
+      outline: none;
+      border-color: #2c3e50;
+      box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+    }
+    
+    .results {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .result-card {
+      background: white;
+      padding: 1.25rem;
+      border-radius: 6px;
+      border-left: 4px solid #2c3e50;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .result-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.75rem;
+    }
+    
+    .result-detail {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.7;
+    }
+    
+    .result-detail strong {
+      color: #2c3e50;
+    }
+    
+    .principle-badge {
+      display: inline-block;
+      background: #e8f4f8;
+      color: #2c5aa0;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin: 0.25rem 0.25rem 0.25rem 0;
+    }
+    
+    .help-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    .help-section h2 {
+      font-size: 1.3rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e8f4f8;
+    }
+    
+    .help-section h3 {
+      font-size: 1rem;
+      color: #2c3e50;
+      margin: 1.25rem 0 0.5rem 0;
+    }
+    
+    .tip {
+      background: #f9f9f9;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      border-left: 3px solid #3498db;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .tip strong {
+      display: block;
+      color: #2c3e50;
+      margin-bottom: 0.25rem;
+    }
+    
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    
+    .principle-item {
+      background: #f0f8ff;
+      padding: 0.75rem;
+      border-radius: 4px;
+      font-weight: 500;
+      color: #2c5aa0;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .no-results {
+      color: #999;
+      font-size: 0.95rem;
+      padding: 2rem 1rem;
+      text-align: center;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+    
+    .mode-content {
+      display: none;
+    }
+    
+    .mode-content.active {
+      display: block;
+    }
+    
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .mode-tabs {
+        gap: 0.25rem;
+      }
+      
+      .mode-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
+      
+      .principles-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 Book of Hours Database</h1>
+      <p>Complete guide to reading, crafting, and mastering the game. Built for mobile—bookmark this link!</p>
+    </header>
+    
+    <div class="mode-tabs">
+      <button class="mode-btn active" onclick="switchMode('help')">Getting Started</button>
+      <button class="mode-btn" onclick="switchMode('books')">Books</button>
+      <button class="mode-btn" onclick="switchMode('recipes')">Recipes</button>
+      <button class="mode-btn" onclick="switchMode('memories')">Memories</button>
+      <button class="mode-btn" onclick="switchMode('skills')">Skills</button>
+      <button class="mode-btn" onclick="switchMode('items')">Items</button>
+    </div>
+    
+    <!-- GETTING STARTED -->
+    <div id="help" class="mode-content active">
+      <div class="help-section">
+        <h2>📖 How to Read Your First Book</h2>
+        <div class="tip"><strong>Step 1: Find a Reading Desk</strong>You start with a desk in the Librarian's Quarters. This is where you read books.</div>
+        <div class="tip"><strong>Step 2: Slot a Book</strong>Drag a book into the desk. The book will show you what it requires (usually 2 Principles for early books).</div>
+        <div class="tip"><strong>Step 3: Boost with a Skill</strong>Every book teaches a Skill. Slot a Skill card that matches the book's Principles. If you don't have one, that's okay—you'll just need other boosts.</div>
+        <div class="tip"><strong>Step 4: Add a Soul</strong>Slot a Soul card (character). This gives 1-4 Principles. Try any Soul—they're not used up.</div>
+        <div class="tip"><strong>Step 5: Click Read</strong>If your total Principles ≥ the book's requirement, you get the book's Skill Lesson + Memory.</div>
+        <div class="tip"><strong>If You Fail</strong>You lose the slotted items. The book becomes corrupted. Start fresh with easier books (mystery level 2-6).</div>
+      </div>
+      
+      <div class="help-section">
+        <h2>⚡ The 12 Principles (Aspects)</h2>
+        <p>Books, items, and skills all have Principles. You need to match or exceed the book's requirement by combining these:</p>
+        <div class="principles-grid">
+          <div class="principle-item">Edge</div>
+          <div class="principle-item">Forge</div>
+          <div class="principle-item">Grail</div>
+          <div class="principle-item">Heart</div>
+          <div class="principle-item">Knock</div>
+          <div class="principle-item">Lantern</div>
+          <div class="principle-item">Moon</div>
+          <div class="principle-item">Moth</div>
+          <div class="principle-item">Nectar</div>
+          <div class="principle-item">Rose</div>
+          <div class="principle-item">Scale</div>
+          <div class="principle-item">Sky</div>
+        </div>
+      </div>
+      
+      <div class="help-section">
+        <h2>🎯 Early Game Strategy</h2>
+        <div class="tip"><strong>Don't reply to the Rhonwen Trust letter yet</strong>—it triggers book corruption. You can ignore it early.</div>
+        <div class="tip"><strong>Unlock these rooms first:</strong> Motley Tower (Dispensary—3 guaranteed books!), Kitchen, Well.</div>
+        <div class="tip"><strong>Read easy books first.</strong> Check a book's "mystery level"—read 2-6 first, save 12+ for later.</div>
+        <div class="tip"><strong>Collect the 22 guaranteed Memories</strong> from different book types. Use those to read harder books.</div>
+        <div class="tip"><strong>Don't craft yet.</strong> Early game is about exploring and reading books. Crafting matters mid/late game.</div>
+        <div class="tip"><strong>Your current problem:</strong> You're reading mystery 12+ books without the foundation. Read "Perugian Diaries" or "What Does Not Bark" first (mystery 4-5). Much easier.</div>
+      </div>
+    </div>
+    
+    <!-- BOOKS -->
+    <div id="books" class="mode-content">
+      <div class="search-container">
+        <input type="text" id="books-search" placeholder="Search books (e.g., 'Perugian', 'mystery 4', 'Heart')" onkeyup="searchBooks()">
+      </div>
+      <div class="results" id="books-results"></div>
+    </div>
+    
+    <!-- RECIPES -->
+    <div id="recipes" class="mode-content">
+      <div class="search-container">
+        <input type="text" id="recipes-search" placeholder="Search recipes (e.g., 'Amethyst', 'Forge', 'Ink')" onkeyup="searchRecipes()">
+      </div>
+      <div class="results" id="recipes-results"></div>
+    </div>
+    
+    <!-- MEMORIES -->
+    <div id="memories" class="mode-content">
+      <div class="search-container">
+        <input type="text" id="memories-search" placeholder="Search memories (e.g., 'Wormwood', 'Moon', 'persistent')" onkeyup="searchMemories()">
+      </div>
+      <div class="results" id="memories-results"></div>
+    </div>
+    
+    <!-- SKILLS -->
+    <div id="skills" class="mode-content">
+      <div class="search-container">
+        <input type="text" id="skills-search" placeholder="Search skills (e.g., 'Edicts Martial', 'Knock')" onkeyup="searchSkills()">
+      </div>
+      <div class="results" id="skills-results"></div>
+    </div>
+    
+    <!-- ITEMS -->
+    <div id="items" class="mode-content">
+      <div class="search-container">
+        <input type="text" id="items-search" placeholder="Search items (e.g., 'Mazarine Fife', 'Lantern')" onkeyup="searchItems()">
+      </div>
+      <div class="results" id="items-results"></div>
+    </div>
+  </div>
+
+  <script>
+    const database = {
+      books: [
+        { name: 'Perugian Diaries', mystery: 4, principles: {Sky: 2, Heart: 1}, skill: 'Strings & Songs', memory: 'Solace', source: 'Dispensary (guaranteed)', notes: 'Early access to music crafting. START HERE if you\'re stuck.' },
+        { name: 'What Does Not Bark', mystery: 5, principles: {Knock: 2, Winter: 1}, skill: 'Edicts Inviolable', source: 'Dispensary (guaranteed)', notes: 'Early defensive skill. Good starter.' },
+        { name: 'The Locksmith\'s Dream vol.4', mystery: 6, principles: {Knock: 2, Sky: 1}, skill: 'Watchman\'s Paradoxes', source: 'Dispensary (guaranteed)', notes: 'Essential for Lantern Ink later.' },
+        { name: 'The Soul\'s Labors', mystery: 8, principles: {Heart: 3}, skill: 'Teachings of the Housewifely Arts', source: 'House library', notes: 'Heart focus, mid-game difficulty.' },
+        { name: 'Prophecies of Glory', mystery: 12, principles: {Sky: 3, Lantern: 2}, skill: 'Sky Stories', source: 'House library', notes: 'This is what you were trying to read. Too hard without prep. Avoid for now.' },
+        { name: 'An Exorcist\'s Field Manual', mystery: 4, principles: {Moon: 2, Edge: 1}, skill: 'Edicts Martial', source: 'First Nocturnal book (save/reload)', notes: 'One of the most powerful skills ever. Essential for Moon/Winter.' },
+        { name: 'Rapt in the King', mystery: 6, principles: {Heart: 2, Nectar: 1}, skill: 'Drums & Dances', source: 'First Nocturnal book (save/reload)', notes: 'Only way to craft Swaddled Thunder and Hive\'s Lament.' }
+      ],
+      memories: [
+        { name: 'Solace', principles: {Heart: 2, Sky: 1}, source: 'Book: Perugian Diaries', type: 'guaranteed', notes: 'Unlocked early in Keeper\'s Lodge.' },
+        { name: 'Impulse', principles: {Moth: 2, Nectar: 1}, source: 'Toss penny at Sea\'s Edge', type: 'quick', notes: 'Easy quick memory.' },
+        { name: 'Touch', principles: {Forge: 1}, source: 'Consider an Armchair', type: 'quick', notes: 'Sit on furniture to get this.' },
+        { name: 'Wormwood Dream', principles: {Moon: 6, Winter: 6, Edge: 3}, source: 'Craft: Telescope + Edicts Martial (lv3)', type: 'persistent', notes: 'ESSENTIAL for Moon/Winter crafting. Hardest memory to make.' },
+        { name: 'Wind-in-Waiting', principles: {Sky: 6, Moth: 3, Grail: 3, Scale: 3}, source: 'Craft: Telescope + Strings & Songs + 2x Mazarine Fife', type: 'persistent', notes: 'Easiest 6-Principle memory. Sky source.' },
+        { name: 'Curious Hunch', principles: {Heart: 3, Knock: 4, Lantern: 3, Moth: 3}, source: 'Craft: Foundry + Preliminal Meter (lv1)', type: 'persistent', notes: 'Knock booster. Requires Amethyst Ampoule (2).' },
+        { name: 'Weather: Sunny', principles: {Lantern: 2}, source: 'Random weather (very common)', type: 'weather', notes: 'Easiest principle to boost. Happens often.' },
+        { name: 'Weather: Fog', principles: {Knock: 3, Moon: 3}, source: 'Random weather', type: 'weather', notes: 'Good for Knock/Moon boost.' }
+      ],
+      skills: [
+        { name: 'Strings & Songs', principles: {Sky: 1, Heart: 1}, source: 'Perugian Diaries (guaranteed)', desc: 'Music crafting. Crafts Swaddled Thunder, Wind-in-Waiting, Thunderskin\'s Paean.' },
+        { name: 'Edicts Martial', principles: {Moon: 1, Edge: 1}, source: 'An Exorcist\'s Field Manual (save/reload)', desc: 'THE skill for Moon/Winter. Crafts Wormwood Dream, Old Wound. Upgrade ASAP.' },
+        { name: 'Watchman\'s Paradoxes', principles: {Lantern: 1, Sky: 1}, source: 'Locksmith\'s Dream (guaranteed)', desc: 'Crafts Uzult (Lantern Ink). Essential late-game.' },
+        { name: 'Lockworks & Clockworks', principles: {Knock: 1, Sky: 1}, source: 'Unlock later', desc: 'Only Knock skill. Crafts Amethyst Ampoule → Gervinite → Chronsichord chain.' },
+        { name: 'Sights & Sensations', principles: {Sky: 1, Winter: 1}, source: 'Keeper\'s Lodge unlock (guaranteed)', desc: 'Winter focus. Crafts Solomon\'s Preparation → Nillycant (Winter Ink).' },
+        { name: 'Leaves & Thorns', principles: {Nectar: 1, Grail: 1}, source: 'Unlock later (guaranteed)', desc: 'Crafts Sacrament Malachite (6 Nectar), Sacrament Calicite (6 Grail).' },
+        { name: 'Preliminal Meter', principles: {Knock: 1, Rose: 1}, source: 'Unlock later (guaranteed)', desc: 'Knock Memory crafting. Crafts Curious Hunch.' },
+        { name: 'Anbary & Lapidary', principles: {Sky: 1, Forge: 1}, source: 'Unlock later (guaranteed)', desc: 'Forge Ink path. Crafts Orpiment Exultant (Forge Ink).' }
+      ],
+      recipes: [
+        { name: 'Amethyst Ampoule', input: 'Shapt (2), Memory: Salt (1), Glassblowing (2)', output: 'Knock 5', workstation: 'Any Desk', skill: 'Lockworks & Clockworks (lv1)', notes: 'Early Knock booster.' },
+        { name: 'Gervinite', input: 'Shapt (2), Knock Memory (2), Amethyst Ampoule (2)', output: 'Knock 10', workstation: 'Foundry', skill: 'Lockworks & Clockworks (lv1)', notes: 'First Knock item.' },
+        { name: 'Mazarine Fife', input: 'Yew Blank (1), Phost (1), Weather (3-4), Sacra Limiae (5)', output: 'Sky 10 (Tool)', workstation: 'Solar Altar', skill: 'Sacra Limiae (lv5)', notes: 'Reusable Sky tool. Critical for Wind-in-Waiting.' },
+        { name: 'Wormwood Dream', input: 'Lunar Globe (1), Moon Memory (2), Trist (1)', output: 'Moon 10 (Persistent)', workstation: 'Telescope', skill: 'Edicts Martial (lv3)', notes: 'Essential for Moon/Winter crafting.' },
+        { name: 'Uzult (Lantern Ink)', input: 'Elegant Sunburst Lamp (3), Lantern Memory (2), Phost (2)', output: 'Lantern 7, Moth 7, Sky 7', workstation: 'Solar Altar', skill: 'Watchman\'s Paradoxes (lv2)', notes: 'Late-game Ink.' },
+        { name: 'Marakat (Nectar Ink)', input: 'Pyrus Auricalcinus (4), Nectar Memory (2), Health (1)', output: 'Grail 7, Knock 7, Nectar 7', workstation: 'Kitchen Range', skill: 'Insects & Nectars (lv3)', notes: 'Late-game Ink.' },
+        { name: 'Nillycant (Winter Ink)', input: 'Wormwood Dream (6), Solomon\'s Preparation (4), Wist (2)', output: 'Edge 7, Scale 7, Winter 7', workstation: 'Alchemist\'s Glassware', skill: 'Sights & Sensations (lv4)', notes: 'Hardest Ink to craft.' }
+      ],
+      items: [
+        { name: 'Pyrus Auricalcinus', principles: {Forge: 4, Nectar: 4}, type: 'Food', source: 'Practic Garden (Numa season)', notes: 'Essential Nectar/Forge booster. Stock up during Numa.' },
+        { name: 'Isle-Water', principles: {Heart: 1, Moon: 1, Winter: 1}, type: 'Beverage', source: 'Well (unlimited)', notes: 'Cheap renewable drink. Use for curing Maladies.' },
+        { name: 'Mist-Kissed Water', principles: {Heart: 1, Knock: 2, Moon: 2, Winter: 1}, type: 'Beverage', source: 'Well (Numa season)', notes: 'Knock/Moon booster.' },
+        { name: 'Mazarine Fife', principles: {Sky: 3}, type: 'Tool (Reusable)', source: 'Craft from Solar Altar', notes: 'Reusable Sky source. Needed for Wind-in-Waiting (requires 2).' },
+        { name: 'Essential Periost', principles: {Moon: 10, Nectar: 4, Scale: 4, Winter: 4}, type: 'Item', source: 'Craft from Necropsy Table', notes: 'When considered = Old Moment (4 Scale). Required for Hive\'s Lament.' },
+        { name: 'Swaddled Thunder', principles: {Heart: 15}, type: 'Item (destroyed after use)', source: 'Craft from Dispensary + Strings & Songs (lv5)', notes: 'When considered = Weather: Storm. Destroyed after one use (DLC update).' }
+      ]
+    };
+
+    function switchMode(mode) {
+      document.querySelectorAll('.mode-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(mode).classList.add('active');
+      document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function renderCard(title, details) {
+      return `<div class="result-card"><div class="result-title">${title}</div><div class="result-detail">${details}</div></div>`;
+    }
+
+    function searchBooks() {
+      const query = document.getElementById('books-search').value.toLowerCase();
+      const results = database.books.filter(b => 
+        b.name.toLowerCase().includes(query) ||
+        Object.keys(b.principles).some(p => p.toLowerCase().includes(query)) ||
+        String(b.mystery).includes(query)
+      );
+      let html = results.length === 0 
+        ? '<div class="no-results">No books found. Try searching by name, principle, or mystery level.</div>'
+        : results.map(b => renderCard(b.name, 
+          `<strong>Mystery:</strong> ${b.mystery} | <strong>Skill:</strong> ${b.skill}<br/>
+           <strong>Principles:</strong> ${Object.entries(b.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
+           <strong>Source:</strong> ${b.source}<br/>
+           <strong>Notes:</strong> ${b.notes}`
+        )).join('');
+      document.getElementById('books-results').innerHTML = html;
+    }
+
+    function searchRecipes() {
+      const query = document.getElementById('recipes-search').value.toLowerCase();
+      const results = database.recipes.filter(r => 
+        r.name.toLowerCase().includes(query) ||
+        r.skill.toLowerCase().includes(query) ||
+        r.output.toLowerCase().includes(query) ||
+        r.input.toLowerCase().includes(query)
+      );
+      let html = results.length === 0 
+        ? '<div class="no-results">No recipes found. Try searching by name or ingredient.</div>'
+        : results.map(r => renderCard(r.name,
+          `<strong>Skill:</strong> ${r.skill}<br/>
+           <strong>Workstation:</strong> ${r.workstation}<br/>
+           <strong>Input:</strong> ${r.input}<br/>
+           <strong>Output:</strong> ${r.output}<br/>
+           <strong>Notes:</strong> ${r.notes}`
+        )).join('');
+      document.getElementById('recipes-results').innerHTML = html;
+    }
+
+    function searchMemories() {
+      const query = document.getElementById('memories-search').value.toLowerCase();
+      const results = database.memories.filter(m => 
+        m.name.toLowerCase().includes(query) ||
+        Object.keys(m.principles).some(p => p.toLowerCase().includes(query)) ||
+        m.source.toLowerCase().includes(query) ||
+        m.type.toLowerCase().includes(query)
+      );
+      let html = results.length === 0 
+        ? '<div class="no-results">No memories found. Try by name or principle.</div>'
+        : results.map(m => renderCard(m.name,
+          `<strong>Principles:</strong> ${Object.entries(m.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
+           <strong>Source:</strong> ${m.source}<br/>
+           <strong>Type:</strong> ${m.type}<br/>
+           <strong>Notes:</strong> ${m.notes}`
+        )).join('');
+      document.getElementById('memories-results').innerHTML = html;
+    }
+
+    function searchSkills() {
+      const query = document.getElementById('skills-search').value.toLowerCase();
+      const results = database.skills.filter(s => 
+        s.name.toLowerCase().includes(query) ||
+        Object.keys(s.principles).some(p => p.toLowerCase().includes(query)) ||
+        s.source.toLowerCase().includes(query) ||
+        s.desc.toLowerCase().includes(query)
+      );
+      let html = results.length === 0 
+        ? '<div class="no-results">No skills found. Try by name or principle.</div>'
+        : results.map(s => renderCard(s.name,
+          `<strong>Principles:</strong> ${Object.entries(s.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
+           <strong>Source:</strong> ${s.source}<br/>
+           <strong>Description:</strong> ${s.desc}`
+        )).join('');
+      document.getElementById('skills-results').innerHTML = html;
+    }
+
+    function searchItems() {
+      const query = document.getElementById('items-search').value.toLowerCase();
+      const results = database.items.filter(i => 
+        i.name.toLowerCase().includes(query) ||
+        Object.keys(i.principles).some(p => p.toLowerCase().includes(query)) ||
+        i.source.toLowerCase().includes(query) ||
+        i.type.toLowerCase().includes(query)
+      );
+      let html = results.length === 0 
+        ? '<div class="no-results">No items found. Try by name or principle.</div>'
+        : results.map(i => renderCard(i.name,
+          `<strong>Type:</strong> ${i.type}<br/>
+           <strong>Principles:</strong> ${Object.entries(i.principles).map(([k,v]) => `<span class="principle-badge">${k} (${v})</span>`).join('')}<br/>
+           <strong>Source:</strong> ${i.source}<br/>
+           <strong>Notes:</strong> ${i.notes}`
+        )).join('');
+      document.getElementById('items-results').innerHTML = html;
+    }
+  </script>
+</body>
+</html>
