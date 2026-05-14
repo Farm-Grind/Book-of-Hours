@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book of Hours Database</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <style>
     * {
       margin: 0;
@@ -228,11 +227,12 @@
       border-radius: 6px;
     }
     
-    #map {
+    #hushHouseMap {
       width: 100%;
-      height: 500px;
+      border: 1px solid #ddd;
       border-radius: 6px;
       margin-bottom: 1.5rem;
+      background: #f9f9f9;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     
@@ -387,7 +387,6 @@
       <button class="mode-btn" onclick="switchMode('items')">Items</button>
     </div>
     
-    <!-- GETTING STARTED -->
     <div id="help" class="mode-content active">
       <div class="help-section">
         <h2>🎮 How to Read Your First Book (What You're Doing Wrong)</h2>
@@ -402,7 +401,6 @@
 
       <div class="help-section">
         <h2>📋 The 3 Game Phases</h2>
-        
         <div class="phase">
           <strong>PHASE 1: BOOTSTRAP (Day 1-3)</strong>
           <p><em>Goal: Get 3 guaranteed skills, unlock 6-8 easy rooms, build initial Memories.</em></p>
@@ -446,19 +444,14 @@
 
       <div class="help-section">
         <h2>⚙️ Key Mechanics You're Missing</h2>
-        
         <h3>Soul Cards (Your Fragments)</h3>
         <p>You start with 2. Unlock more by binding Skills to the Wisdom Tree (the card grid in lower right). Each slot gives you a new Soul card type when filled. You get 9 total. Each Soul can be used multiple times per day—they're not consumed. But they get <strong>fatigued</strong> after use and must rest overnight.</p>
-        
         <h3>Lessons vs. Memories</h3>
         <p><strong>Lessons</strong> (finite, yellow cards) come from reading books. They unlock new Skills or level existing ones. Use them strategically—don't waste them. <strong>Memories</strong> (common, blue cards) come from considering objects, reading mastered books, or crafting. They're temporary—they fade at day end. Reusable is fine.</p>
-        
         <h3>Upgrading Assistants for Room Unlocking</h3>
         <p>When you talk to an assistant (free or hired), you can give them <strong>ONE of each</strong>: Memory, Soul card, Tool, Beverage, Food. This boosts their Principles for that day. Some assistants (blacksmith, engineer, poet) have a 6th slot for special items (metal, fuel, flowers). You only unlock one room per assistant per day.</p>
-        
         <h3>Don't Upgrade Soul Cards Yet</h3>
         <p>Soul evolution (turning a Soul into +Soul or ++Soul for more Principles) sounds good but costs <strong>3 actions per day permanently</strong>. Early game, skip it. Even late game, only upgrade if you have spare actions.</p>
-
         <h3>Weather is Free</h3>
         <p>Every day you get random weather (Sunny, Fog, Snow, etc.). Each adds 2-3 of a Principle. Use it! It's renewable and free.</p>
       </div>
@@ -490,16 +483,14 @@
       </div>
     </div>
 
-    <!-- ROOMS -->
     <div id="rooms" class="mode-content">
       <div class="search-container">
         <input type="text" id="rooms-search" placeholder="Search rooms (e.g., 'Dispensary', 'Lantern', 'priority')" onkeyup="searchRooms()">
       </div>
-      <div id="map"></div>
+      <svg id="hushHouseMap" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="results" id="rooms-results"></div>
     </div>
 
-    <!-- WORKSTATIONS -->
     <div id="workstations" class="mode-content">
       <div class="search-container">
         <input type="text" id="workstations-search" placeholder="Search workstations (e.g., 'Solar Altar', 'Desk', 'crafting')" onkeyup="searchWorkstations()">
@@ -507,7 +498,6 @@
       <div class="results" id="workstations-results"></div>
     </div>
 
-    <!-- BOOKS -->
     <div id="books" class="mode-content">
       <div class="search-container">
         <input type="text" id="books-search" placeholder="Search books (e.g., 'Perugian', 'mystery 4', 'Heart')" onkeyup="searchBooks()">
@@ -515,7 +505,6 @@
       <div class="results" id="books-results"></div>
     </div>
 
-    <!-- RECIPES -->
     <div id="recipes" class="mode-content">
       <div class="search-container">
         <input type="text" id="recipes-search" placeholder="Search recipes (e.g., 'Amethyst', 'Wormwood', 'Ink')" onkeyup="searchRecipes()">
@@ -523,7 +512,6 @@
       <div class="results" id="recipes-results"></div>
     </div>
 
-    <!-- MEMORIES -->
     <div id="memories" class="mode-content">
       <div class="search-container">
         <input type="text" id="memories-search" placeholder="Search memories (e.g., 'Wormwood', 'Moon', 'persistent')" onkeyup="searchMemories()">
@@ -531,7 +519,6 @@
       <div class="results" id="memories-results"></div>
     </div>
 
-    <!-- SKILLS -->
     <div id="skills" class="mode-content">
       <div class="search-container">
         <input type="text" id="skills-search" placeholder="Search skills (e.g., 'Edicts Martial', 'Knock')" onkeyup="searchSkills()">
@@ -539,7 +526,6 @@
       <div class="results" id="skills-results"></div>
     </div>
 
-    <!-- ITEMS -->
     <div id="items" class="mode-content">
       <div class="search-container">
         <input type="text" id="items-search" placeholder="Search items (e.g., 'Mazarine Fife', 'Lantern')" onkeyup="searchItems()">
@@ -552,9 +538,7 @@
         <h2 id="panelTitle">Room Details</h2>
         <button class="detail-panel-close" onclick="closeDetailPanel()">×</button>
       </div>
-      <div class="detail-panel-content" id="panelContent">
-        <!-- Content populated by JavaScript -->
-      </div>
+      <div class="detail-panel-content" id="panelContent"></div>
     </div>
   </div>
 
@@ -761,50 +745,93 @@
       document.getElementById('items-results').innerHTML = html;
     }
 
-    let mapInstance = null;
-    let markers = {};
-
     function initMap() {
-      if (mapInstance) return;
-      mapInstance = L.map('map').setView([51.505, -0.09], 2);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
-      }).addTo(mapInstance);
-      addRoomMarkers();
-    }
+      const svg = document.getElementById('hushHouseMap');
+      if (svg.hasChildNodes()) return;
+      
+      const roomRects = [
+        { name: 'Motley Tower: Dispensary', x: 50, y: 100, width: 120, height: 100, priority: 1 },
+        { name: 'Kitchen', x: 250, y: 200, width: 130, height: 110, priority: 1 },
+        { name: 'The Well', x: 450, y: 250, width: 100, height: 90, priority: 1 },
+        { name: 'Reading Room', x: 650, y: 150, width: 140, height: 120, priority: 2 },
+        { name: 'Grand Ascent', x: 850, y: 100, width: 130, height: 130, priority: 2 },
+        { name: 'Solar Temple (Nave of Abbey Church)', x: 150, y: 350, width: 140, height: 110, priority: 2 },
+        { name: 'Alchemist\'s Glassware (Fludd Gallery)', x: 350, y: 400, width: 150, height: 100, priority: 2 },
+        { name: 'Foundry', x: 600, y: 350, width: 120, height: 100, priority: 2 },
+        { name: 'Curia', x: 800, y: 400, width: 130, height: 110, priority: 3 },
+        { name: 'The Gaol (Prison)', x: 100, y: 550, width: 140, height: 120, priority: 3 },
+        { name: 'Sisterhood of the Knot (Caves)', x: 350, y: 600, width: 150, height: 110, priority: 3 }
+      ];
 
-    function addRoomMarkers() {
-      const coords = {
-        'Motley Tower: Dispensary': [51.51, -0.10],
-        'Kitchen': [51.50, -0.09],
-        'The Well': [51.50, -0.095],
-        'Reading Room': [51.505, -0.085],
-        'Grand Ascent': [51.508, -0.088],
-        'Solar Temple (Nave of Abbey Church)': [51.512, -0.092],
-        'Alchemist\'s Glassware (Fludd Gallery)': [51.503, -0.087],
-        'Foundry': [51.502, -0.091],
-        'Curia': [51.507, -0.082],
-        'The Gaol (Prison)': [51.495, -0.088],
-        'Sisterhood of the Knot (Caves)': [51.498, -0.096]
-      };
+      const colors = { 1: '#c0392b', 2: '#f39c12', 3: '#3498db' };
 
-      database.rooms.forEach(room => {
-        const coord = coords[room.name] || [51.505, -0.09];
-        const marker = L.circleMarker(coord, {
-          radius: 8,
-          fillColor: room.priority === 1 ? '#c0392b' : room.priority === 2 ? '#f39c12' : '#3498db',
-          color: '#fff',
-          weight: 2,
-          opacity: 1,
-          fillOpacity: 0.8
+      roomRects.forEach((room, idx) => {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', room.x);
+        rect.setAttribute('y', room.y);
+        rect.setAttribute('width', room.width);
+        rect.setAttribute('height', room.height);
+        rect.setAttribute('fill', colors[room.priority]);
+        rect.setAttribute('stroke', 'white');
+        rect.setAttribute('stroke-width', '2');
+        rect.setAttribute('rx', '4');
+        rect.setAttribute('opacity', '0.7');
+        rect.setAttribute('cursor', 'pointer');
+        rect.setAttribute('data-room-id', idx);
+        
+        rect.addEventListener('click', () => {
+          const dbRoom = database.rooms.find(r => r.name === room.name);
+          if (dbRoom) showDetailPanel(dbRoom);
         });
-        marker.bindPopup(`<strong>${room.name}</strong><br/>${room.unlock}`);
-        marker.on('click', () => showDetailPanel(room));
-        marker.on('mouseover', function() { this.openPopup(); });
-        marker.on('mouseout', function() { this.closePopup(); });
-        marker.addTo(mapInstance);
-        markers[room.name] = marker;
+        
+        rect.addEventListener('mouseover', function() {
+          this.setAttribute('opacity', '1');
+          this.setAttribute('stroke-width', '3');
+        });
+        
+        rect.addEventListener('mouseout', function() {
+          this.setAttribute('opacity', '0.7');
+          this.setAttribute('stroke-width', '2');
+        });
+        
+        svg.appendChild(rect);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', room.x + room.width / 2);
+        text.setAttribute('y', room.y + room.height / 2);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dominant-baseline', 'middle');
+        text.setAttribute('fill', 'white');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-weight', 'bold');
+        text.setAttribute('pointer-events', 'none');
+        text.textContent = room.name.split('(')[0].trim().substring(0, 18);
+        svg.appendChild(text);
+      });
+
+      const legend = [
+        { color: '#c0392b', label: 'Priority 1', x: 50, y: 750 },
+        { color: '#f39c12', label: 'Priority 2', x: 350, y: 750 },
+        { color: '#3498db', label: 'Priority 3', x: 650, y: 750 }
+      ];
+
+      legend.forEach(item => {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', item.x);
+        rect.setAttribute('y', item.y);
+        rect.setAttribute('width', '20');
+        rect.setAttribute('height', '20');
+        rect.setAttribute('fill', item.color);
+        rect.setAttribute('rx', '2');
+        svg.appendChild(rect);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', item.x + 30);
+        text.setAttribute('y', item.y + 15);
+        text.setAttribute('font-size', '12');
+        text.setAttribute('fill', '#333');
+        text.textContent = item.label;
+        svg.appendChild(text);
       });
     }
 
@@ -835,7 +862,6 @@
       document.getElementById('detailPanel').classList.remove('open');
     }
 
-    // Initialize all search results on page load
     function initializeAllSearches() {
       searchRooms();
       searchWorkstations();
@@ -857,13 +883,10 @@
       document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
       event.target.classList.add('active');
       
-      // Initialize map when rooms tab is opened
-      if (mode === 'rooms' && !mapInstance) {
+      if (mode === 'rooms') {
         setTimeout(() => initMap(), 100);
       }
     }
   </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </body>
 </html>
