@@ -409,10 +409,10 @@
       <button class="mode-btn" onclick="switchMode('map')">Map</button>
       <button class="mode-btn" onclick="switchMode('rooms')">Rooms</button>
       <button class="mode-btn" onclick="switchMode('workstations')">Workstations</button>
-      <button class="mode-btn" onclick="switchMode('crafting')">Crafting</button>
       <button class="mode-btn" onclick="switchMode('books')">Books</button>
       <button class="mode-btn" onclick="switchMode('skills')">Skills</button>
       <button class="mode-btn" onclick="switchMode('mechanics')">Mechanics</button>
+      <button class="mode-btn" onclick="switchMode('crafting')">Crafting</button>
     </div>
 
     <!-- MECHANICS TUTORIAL -->
@@ -537,56 +537,73 @@
     <!-- INTERACTIVE MAP -->
     <div id="map" class="mode-content">
       <div class="help-section">
-        <h2>🗺️ Interactive Map</h2>
-        <p>Hover for quick info. Click boxes to see details.</p>
+        <h2>🗺️ Interactive Map – All 69 Rooms</h2>
+        <p>Hover to see room name. Click for details. Use zoom buttons below.</p>
         
         <div class="era-legend">
-          <div class="legend-item"><div class="legend-color" style="background: #d4af99;"></div> Exterior/Lodge</div>
-          <div class="legend-item"><div class="legend-color" style="background: #f4e4c1;"></div> Solar Gothic</div>
-          <div class="legend-item"><div class="legend-color" style="background: #e8b4d4;"></div> Baronial</div>
-          <div class="legend-item"><div class="legend-color" style="background: #b4d4e8;"></div> Curia</div>
-          <div class="legend-item"><div class="legend-color" style="background: #d4b4e8;"></div> Nocturnal</div>
-          <div class="legend-item"><div class="legend-color" style="background: #c1e8b4;"></div> Open Air</div>
+          <div class="legend-item"><div class="legend-color" style="background: #90EE90;"></div> Open Air</div>
+          <div class="legend-item"><div class="legend-color" style="background: #FFD700;"></div> Solar</div>
+          <div class="legend-item"><div class="legend-color" style="background: #FFB6C1;"></div> Baronial</div>
+          <div class="legend-item"><div class="legend-color" style="background: #87CEEB;"></div> Curia</div>
+          <div class="legend-item"><div class="legend-color" style="background: #DDA0DD;"></div> Nocturnal</div>
         </div>
 
-        <svg class="map" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#eee" stroke-width="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="1200" height="700" fill="url(#grid)" />
+        <div style="margin-bottom: 1rem;">
+          <button onclick="zoomMap(1.2)" style="padding: 0.5rem 1rem; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">🔍+ Zoom In</button>
+          <button onclick="zoomMap(0.8)" style="padding: 0.5rem 1rem; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">🔍- Zoom Out</button>
+          <button onclick="resetZoom()" style="padding: 0.5rem 1rem; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset View</button>
+        </div>
 
-          <!-- Rooms -->
-          <rect class="room-box" x="50" y="300" width="80" height="60" fill="#d4af99" stroke="#999" stroke-width="2" onclick="alert('Watchman\'s Tower: Gatehouse\nUnlock: Free')" onmouseover="showTooltip(event, 'Gatehouse', 'Free')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="90" y="335">Gatehouse</text>
-
-          <rect class="room-box" x="200" y="100" width="80" height="70" fill="#e8b4d4" stroke="#999" stroke-width="2" onclick="alert('Motley Tower: Dispensary\nUnlock: 6 Heart OR 6 Moth')" onmouseover="showTooltip(event, 'Dispensary', '6 Heart OR 6 Moth')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="240" y="140">Dispensary</text>
-
-          <rect class="room-box" x="350" y="250" width="80" height="70" fill="#e8b4d4" stroke="#999" stroke-width="2" onclick="alert('Kitchen\nUnlock: 7 Nectar OR 7 Forge')" onmouseover="showTooltip(event, 'Kitchen', '7 Nectar OR 7 Forge')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="390" y="290">Kitchen</text>
-
-          <rect class="room-box" x="500" y="250" width="80" height="70" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('The Well\nUnlock: 7 Nectar')" onmouseover="showTooltip(event, 'The Well', '7 Nectar')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="540" y="290">Well</text>
-
-          <rect class="room-box" x="600" y="150" width="80" height="100" fill="#b4d4e8" stroke="#999" stroke-width="2" onclick="alert('Reading Room\nUnlock: 8 Lantern OR 8 Sky')" onmouseover="showTooltip(event, 'Reading Room', '8 Lantern OR 8 Sky')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="640" y="205">Reading Rm</text>
-
-          <rect class="room-box" x="750" y="150" width="80" height="70" fill="#f4e4c1" stroke="#999" stroke-width="2" onclick="alert('Solar Temple\nUnlock: 12 Sky OR 12 Lantern')" onmouseover="showTooltip(event, 'Solar Temple', '12 Sky OR 12 Lantern')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="790" y="190">Solar Temple</text>
-
-          <rect class="room-box" x="300" y="450" width="70" height="60" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('Scent Garden\nUnlock: Free')" onmouseover="showTooltip(event, 'Scent Garden', 'Free')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="335" y="485">Scent Gdn</text>
-
-          <rect class="room-box" x="450" y="450" width="70" height="60" fill="#c1e8b4" stroke="#999" stroke-width="2" onclick="alert('Practic Garden\nUnlock: Free')" onmouseover="showTooltip(event, 'Practic Garden', 'Free')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="485" y="485">Practic Gdn</text>
-
-          <rect class="room-box" x="900" y="200" width="80" height="70" fill="#d4b4e8" stroke="#999" stroke-width="2" onclick="alert('The Gaol\nUnlock: 16 Knock (various)')" onmouseover="showTooltip(event, 'The Gaol', '16 Knock (various)')" onmouseout="hideTooltip()"/>
-          <text class="room-label" x="940" y="240">Gaol</text>
-
-          <text x="50" y="680" font-size="12" fill="#666">Click rooms for details • See Rooms tab for complete 40+ room catalog</text>
-        </svg>
+        <div style="overflow: auto; border: 1px solid #ddd; border-radius: 4px; height: 600px; background: #fafafa;">
+          <svg id="map-svg" viewBox="0 0 2000 1600" xmlns="http://www.w3.org/2000/svg" style="width: 100%; min-width: 1200px; display: block;">
+            <!-- Grid lines -->
+            <defs>
+              <pattern id="mapgrid" width="100" height="100" patternUnits="userSpaceOnUse">
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#eee" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="2000" height="1600" fill="url(#mapgrid)"/>
+            
+            <!-- Floor labels (Y-axis) -->
+            <text x="10" y="50" font-size="11" font-weight="bold" fill="#666">+10</text>
+            <text x="10" y="150" font-size="11" font-weight="bold" fill="#666">+9</text>
+            <text x="10" y="250" font-size="11" font-weight="bold" fill="#666">+8</text>
+            <text x="10" y="350" font-size="11" font-weight="bold" fill="#666">+7</text>
+            <text x="10" y="450" font-size="11" font-weight="bold" fill="#666">+6</text>
+            <text x="10" y="550" font-size="11" font-weight="bold" fill="#666">+5</text>
+            <text x="10" y="650" font-size="11" font-weight="bold" fill="#666">+4</text>
+            <text x="10" y="750" font-size="11" font-weight="bold" fill="#666">+3</text>
+            <text x="10" y="850" font-size="11" font-weight="bold" fill="#666">+2</text>
+            <text x="10" y="950" font-size="11" font-weight="bold" fill="#666">+1</text>
+            <text x="10" y="1050" font-size="11" font-weight="bold" fill="#666">0</text>
+            <text x="10" y="1150" font-size="11" font-weight="bold" fill="#666">-1</text>
+            <text x="10" y="1250" font-size="11" font-weight="bold" fill="#666">-2</text>
+            <text x="10" y="1350" font-size="11" font-weight="bold" fill="#666">-3</text>
+            <text x="10" y="1450" font-size="11" font-weight="bold" fill="#666">-4</text>
+            <text x="10" y="1550" font-size="11" font-weight="bold" fill="#666">-5+</text>
+            
+            <!-- Column labels (X-axis) -->
+            <text x="100" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">A</text>
+            <text x="200" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">B</text>
+            <text x="300" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">C</text>
+            <text x="400" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">D</text>
+            <text x="500" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">E</text>
+            <text x="600" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">F</text>
+            <text x="700" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">G</text>
+            <text x="800" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">H</text>
+            <text x="900" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">I</text>
+            <text x="1000" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">J</text>
+            <text x="1100" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">K</text>
+            <text x="1200" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">L</text>
+            <text x="1300" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">M</text>
+            <text x="1400" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">N</text>
+            <text x="1500" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">O</text>
+            <text x="1600" y="1590" font-size="10" font-weight="bold" fill="#666" text-anchor="middle">P</text>
+            
+            <!-- Rooms will be generated by JavaScript -->
+            <g id="rooms-group"></g>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -666,50 +683,50 @@
         
         <h3>Uzult (Lantern: 15 Lantern + 15 Moth + 15 Sky)</h3>
         <div class="crafting-chain">
-Step 1 (10 Lantern): Watchman's Paradoxes (lv2) @ Solar Altar<br>
+Step 1 (10 Lantern): Watchman's Paradoxes (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Solar Altar'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Solar Altar</a><br>
   → Elegant Sunburst Lamp + 2x Lantern Memory + 2x Phost + 2x Glass<br>
   = Xanthotic Essence<br>
 <br>
-Step 2 (15 Lantern): Watchman's Paradoxes (lv4) @ Solar Altar<br>
+Step 2 (15 Lantern): Watchman's Paradoxes (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Solar Altar'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Solar Altar</a><br>
   → Xanthotic Essence + 3x Lantern Memory + 3x Elegant Sunburst Lamp<br>
   = Uzult (Lantern Ink)
         </div>
 
         <h3>Marakat (Nectar: 15 Nectar + 15 Grail + 15 Knock)</h3>
         <div class="crafting-chain">
-Step 1 (10 Nectar): Drums & Dances (lv1) @ Kitchen Range<br>
+Step 1 (10 Nectar): Drums & Dances (lv1) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen Range'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen Range</a><br>
   → 2x Insect & Nectars + Nectar Memory + Leathy<br>
 <br>
-Step 2 (15 Nectar): Drums & Dances (lv4) @ Kitchen Range<br>
+Step 2 (15 Nectar): Drums & Dances (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen Range'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen Range</a><br>
   → Leathy + 4x Insect & Nectars + 2x Nectar Memory<br>
   = Marakat (Nectar Ink)
         </div>
 
         <h3>Nillycant (Winter: 15 Winter + 15 Edge + 15 Scale)</h3>
         <div class="crafting-chain">
-Step 1 (10 Winter): Sights & Sensations (lv1) @ Alchemist's Glassware<br>
+Step 1 (10 Winter): Sights & Sensations (lv1) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
   → 2x Flower + Winter Memory + Solomon's Preparation<br>
-  (Solomon's Prep = 10 Winter, Flowers, Drink, Winter Memory @ Kitchen)<br>
+  (Solomon's Prep = 10 Winter, Flowers, Drink, Winter Memory @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Kitchen'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Kitchen</a>)<br>
 <br>
-Step 2 (15 Winter): Sights & Sensations (lv4) @ Alchemist's Glassware<br>
+Step 2 (15 Winter): Sights & Sensations (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
   → Solomon's Preparation + 4x Flower + 2x Winter Memory<br>
   = Nillycant (Winter Ink)
         </div>
 
         <h3>Porphyrine (Rose: 15 Rose + 15 Moon + 15 Knock)</h3>
         <div class="crafting-chain">
-Step 1 (10 Rose): Inks of Revelation (lv2) @ Desk<br>
+Step 1 (10 Rose): Inks of Revelation (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Desk'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Desk</a><br>
   → Light-based items (Mirrors, Stained Glass)<br>
   = Ichor Auroral (10 Rose)<br>
 <br>
-Step 2 (15 Rose): Inks of Power (lv4) @ Desk<br>
+Step 2 (15 Rose): Inks of Power (lv4) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Desk'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Desk</a><br>
   → Ichor Auroral + 2x Rose Memory<br>
   = Porphyrine (Rose Ink)
         </div>
 
         <h3>Orpiment Exultant (Forge: 15 Forge + 15 Heart + 15 Sky)</h3>
         <div class="crafting-chain">
-Step 1 (10 Forge): Anbary & Lapidary (lv2) @ Alchemist's Glassware<br>
+Step 1 (10 Forge): Anbary & Lapidary (lv2) @ <a href="#" onclick="jumpToTabAndSearch('workstations', 'Alchemist'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">Alchemist's Glassware</a><br>
   → 2x Mettle + 2x Forge Memory + 2x Honeyscar Jasmine + 2x Veiled Goddess Lapsang<br>
   = Iotic Essence<br>
 <br>
@@ -752,6 +769,18 @@ Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
   </div>
 
   <div class="room-tooltip" id="tooltip"></div>
+
+  <!-- Room Detail Panel Modal -->
+  <div id="room-detail-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; padding: 2rem;">
+    <div style="background:white; border-radius:8px; padding:2rem; max-width:500px; margin:auto; margin-top:5%; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+      <button onclick="document.getElementById('room-detail-modal').style.display='none'" style="float:right; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+      <h2 id="room-detail-name" style="margin-top:0;"></h2>
+      <p><strong>Coordinate:</strong> <span id="room-detail-coord"></span></p>
+      <p><strong>Era:</strong> <span id="room-detail-era"></span></p>
+      <p><strong>Unlock Requirement:</strong> <span id="room-detail-unlock" style="background:#f0f0f0; padding:0.5rem; border-radius:4px; display:inline-block;"></span></p>
+      <p style="margin-top:1.5rem; font-size:0.9rem; color:#666;">Click any tab to explore more details. Search the Rooms tab for additional information.</p>
+    </div>
+  </div>
 
   <script>
     const database = {
@@ -827,6 +856,36 @@ Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
       document.getElementById('tooltip').style.display = 'none';
     }
 
+    function linkifyWorkstations(text) {
+      const workstations = ['Desk', 'Kitchen Range', 'Solar Altar', 'Foundry', 'Alchemist\'s Glassware', 'Telescope', 'Dispensary', 'Necropsy Table', 'Bed', 'Shrine', 'Gathering', 'Practic Garden Dummy', 'Barber\'s Chair', 'Piano', 'Loom', 'Projector', 'Phonograph', 'Workbench', 'Clock', 'Bells', 'Prospect', 'Spring', 'Cage', 'Catacombs', 'Altar'];
+      let result = text;
+      workstations.forEach(ws => {
+        const regex = new RegExp(`\\b${ws}\\b`, 'gi');
+        result = result.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('workstations', '${ws}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${ws}</a>`);
+      });
+      return result;
+    }
+
+    function linkifySkills(text) {
+      const skills = ['Strings & Songs', 'Edicts Inviolable', 'Watchman\'s Paradoxes', 'Edicts Martial', 'Sights & Sensations', 'Anbary & Lapidary', 'Drums & Dances', 'Inks of Revelation', 'Inks of Power', 'Illumination', 'Preservation', 'Horomachistry', 'Nyctodromy', 'Ithastry', 'Hushery', 'Skolekosophy', 'Birdsong'];
+      let result = text;
+      skills.forEach(skill => {
+        const regex = new RegExp(`\\b${skill}\\b`, 'g');
+        result = result.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('skills', '${skill}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${skill}</a>`);
+      });
+      return result;
+    }
+
+    function linkifyRooms(text) {
+      const rooms = ['Gatehouse', 'Dispensary', 'Kitchen', 'Well', 'Reading Room', 'Solar Temple', 'Foundry', 'Practic Garden', 'Scent Garden', 'Infirmary', 'Examination Room', 'Chancel', 'Radiant Stair', 'Duelling Hall', 'Violet Chamber', 'Pale Chamber', 'Gaol', 'Caverns', 'Observatory', 'Servants Hall', 'Grand Ascent'];
+      let result = text;
+      rooms.forEach(room => {
+        const regex = new RegExp(`\\b${room}\\b`, 'gi');
+        result = result.replace(regex, `<a href="#" onclick="jumpToTabAndSearch('rooms', '${room}'); return false;" style="color: #2c3e50; text-decoration: underline; cursor: pointer;">${room}</a>`);
+      });
+      return result;
+    }
+
     function searchRooms() {
       const query = document.getElementById('rooms-search').value.toLowerCase();
       const results = query === '' ? database.rooms : database.rooms.filter(r =>
@@ -834,7 +893,7 @@ Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
       );
       let html = results.length === 0 
         ? '<div class="no-results">No rooms found.</div>'
-        : results.map(r => `<div class="result-card"><div class="result-title"><span class="priority-badge priority-${r.priority}">P${r.priority}</span>${r.name}</div><div class="result-detail"><strong>Unlock:</strong> ${r.unlock}<br/><strong>Workstations:</strong> ${r.workstations}<br/><strong>Contains:</strong> ${r.contents}</div></div>`).join('');
+        : results.map(r => `<div class="result-card"><div class="result-title"><span class="priority-badge priority-${r.priority}">P${r.priority}</span>${r.name}</div><div class="result-detail"><strong>Unlock:</strong> ${r.unlock}<br/><strong>Workstations:</strong> ${linkifyWorkstations(r.workstations)}<br/><strong>Contains:</strong> ${linkifyWorkstations(r.contents)}</div></div>`).join('');
       document.getElementById('rooms-results').innerHTML = html;
     }
 
@@ -878,8 +937,186 @@ Curious Hunch (4 Knock + 3 Heart + 3 Lantern + 3 Moth):<br>
       event.target.classList.add('active');
     }
 
-    // Initialize on load
-    window.addEventListener('load', () => {
+    // Map room data
+    const mapRooms = [
+      { name: "Keeper's Lodge", coord: "KL", unlock: "Free", era: "open" },
+      { name: "Solomon's Quarters", coord: "2B", unlock: "Free", era: "baronial" },
+      { name: "Infirmary", coord: "2D", unlock: "Via Kitchen", era: "baronial" },
+      { name: "Regensburg Room", coord: "6D", unlock: "6 Heart or 6 Sky", era: "solar" },
+      { name: "Severn Chamber", coord: "2G", unlock: "Unknown", era: "baronial" },
+      { name: "Violet Chamber", coord: "2H", unlock: "6 Knock or 6 Scale", era: "baronial" },
+      { name: "Servants' Quarters – South", coord: "-1I", unlock: "8 Heart or 8 Knock", era: "baronial" },
+      { name: "Servants' Quarters – North", coord: "-1J", unlock: "8 Heart or 8 Knock", era: "baronial" },
+      { name: "Pale Chamber", coord: "2I", unlock: "7 Moth or 7 Winter", era: "baronial" },
+      { name: "Librarian's Quarters", coord: "2J", unlock: "3 Forge/Heart/Lantern/Scale", era: "curia" },
+      { name: "Cell: Adepts", coord: "2O", unlock: "12 Forge or Knock", era: "nocturnal" },
+      { name: "Cell: Long", coord: "2P", unlock: "13 Edge or Knock", era: "nocturnal" },
+      { name: "Watchman's Tower: First Floor", coord: "1A", unlock: "Free", era: "baronial" },
+      { name: "Solomon's Study", coord: "1B", unlock: "Free", era: "baronial" },
+      { name: "Reading Room", coord: "0G", unlock: "8 Lantern or 8 Sky", era: "curia" },
+      { name: "Westcott Room", coord: "1G", unlock: "5 Forge or 5 Lantern", era: "curia" },
+      { name: "Map Room", coord: "1H", unlock: "6 Heart/Rose/Sky", era: "curia" },
+      { name: "Chapter House", coord: "6J", unlock: "9 Lantern/Moon/Winter", era: "nocturnal" },
+      { name: "Governor's Office", coord: "3N", unlock: "12 Forge or Heart", era: "nocturnal" },
+      { name: "Watchman's Tower: Observatory", coord: "2A", unlock: "Free", era: "baronial" },
+      { name: "Patient's Lounge", coord: "3D", unlock: "Via Examination", era: "baronial" },
+      { name: "Practic Garden", coord: "-1B", unlock: "Free", era: "open" },
+      { name: "Examination Room", coord: "3E", unlock: "Via Infirmary", era: "baronial" },
+      { name: "Illopoly's Nook", coord: "4D", unlock: "Unknown", era: "curia" },
+      { name: "Dispensary", coord: "5D", unlock: "6 Heart or 6 Moth", era: "solar" },
+      { name: "Servants' Hall", coord: "-1F", unlock: "Via Kitchen", era: "baronial" },
+      { name: "Atrium", coord: "4F", unlock: "Unknown", era: "curia" },
+      { name: "Glorious Stair", coord: "5F", unlock: "6 Edge/Forge/Winter", era: "solar" },
+      { name: "Windlit Gallery", coord: "6F", unlock: "8 Forge/Lantern/Sky", era: "solar" },
+      { name: "Foundry", coord: "-2G", unlock: "10 Forge or 10 Knock", era: "baronial" },
+      { name: "Kitchen", coord: "-1G", unlock: "7 Nectar or 7 Forge", era: "baronial" },
+      { name: "Fludd Gallery", coord: "3G", unlock: "Unknown", era: "curia" },
+      { name: "Nave of the Abbey Church", coord: "4G", unlock: "12 Sky or 12 Lantern", era: "solar" },
+      { name: "Mazarine Room", coord: "0H", unlock: "Unknown", era: "curia" },
+      { name: "Sacred Spring", coord: "-5H", unlock: "10 Moon or Nectar", era: "nocturnal" },
+      { name: "Rowenarium", coord: "-6F", unlock: "13 Rose or Winter", era: "nocturnal" },
+      { name: "Columbic Crypt", coord: "-7I", unlock: "12 Moon or Winter", era: "nocturnal" },
+      { name: "Duelling Hall", coord: "1I", unlock: "8 Edge or 8 Grail", era: "baronial" },
+      { name: "Hall of Division", coord: "3I", unlock: "Unknown", era: "curia" },
+      { name: "Chancel of the Abbey Church", coord: "4I", unlock: "9 Heart/Lantern/Moon/Winter", era: "solar" },
+      { name: "Radiant Stair", coord: "5I", unlock: "6 Edge/Forge/Knock/Lantern", era: "solar" },
+      { name: "Tower Clock", coord: "8I", unlock: "10 Forge/Sky or 10 Winter", era: "nocturnal" },
+      { name: "Bells", coord: "9I", unlock: "11 Forge/Heart or Sky", era: "nocturnal" },
+      { name: "Spire", coord: "10I", unlock: "12 Lantern/Moth or Sky", era: "nocturnal" },
+      { name: "Night Gallery", coord: "0L", unlock: "10 Winter or 10 Moth", era: "nocturnal" },
+      { name: "Gullscry Loggia", coord: "2L", unlock: "9 Rose or 9 Sky", era: "nocturnal" },
+      { name: "Valentine's Room", coord: "3L", unlock: "10 Forge/Heart or Sky", era: "nocturnal" },
+      { name: "Eale's Room", coord: "4L", unlock: "11 Knock/Sky or Winter", era: "nocturnal" },
+      { name: "Gullscry Tower: Summit", coord: "5L", unlock: "12 Rose/Sky or Winter", era: "nocturnal" },
+      { name: "Gaol Yard", coord: "1N", unlock: "10 Grail/Heart or Winter", era: "nocturnal" },
+      { name: "Governor's Quarters", coord: "4N", unlock: "13 Forge or Winter", era: "nocturnal" },
+      { name: "Interview Laboratory", coord: "5N", unlock: "14 Knock/Moth or Winter", era: "nocturnal" },
+      { name: "Cell: ?", coord: "3O", unlock: "14 Grail/Moth or Scale", era: "nocturnal" },
+      { name: "Gaol Kitchen", coord: "1P", unlock: "12 Grail/Heart or Winter", era: "nocturnal" },
+      { name: "Oubliette", coord: "-1P", unlock: "15 Forge/Knock or Winter", era: "nocturnal" },
+      { name: "Our Lady Beneath", coord: "-5J", unlock: "LIQUID with aspects", era: "nocturnal" },
+      { name: "Chapel Calicite", coord: "-6J", unlock: "14 Grail or Nectar", era: "nocturnal" },
+      { name: "Chapel Ascite", coord: "-6K", unlock: "14 Edge or Knock", era: "nocturnal" },
+      { name: "Chapel Malachite", coord: "-6L", unlock: "14 Heart or Nectar", era: "nocturnal" },
+      { name: "Catacombs", coord: "-7J", unlock: "15 Grail or Winter", era: "nocturnal" },
+      { name: "Deeplight Caves", coord: "-8N", unlock: "14 Moon or Nectar", era: "nocturnal" },
+      { name: "Shrine to St Tentreto", coord: "-8M", unlock: "15 Moth or Scale", era: "nocturnal" },
+      { name: "St Brandan's Cloister", coord: "0B", unlock: "Free", era: "open" },
+      { name: "Scent Garden", coord: "-1D", unlock: "Free", era: "open" },
+      { name: "Kitchen Garden", coord: "-2I", unlock: "Free", era: "open" },
+      { name: "Well", coord: "-2H", unlock: "7 Nectar", era: "open" },
+      { name: "Sea Caves", coord: "-7N", unlock: "Solve pump puzzle", era: "nocturnal" },
+      { name: "Entrance Hall", coord: "0D", unlock: "Free", era: "baronial" },
+      { name: "Solarium", coord: "7J", unlock: "10 Heart/Lantern or Winter", era: "nocturnal" }
+    ];
+
+    const eraColors = {
+      open: "#90EE90",
+      solar: "#FFD700",
+      baronial: "#FFB6C1",
+      curia: "#87CEEB",
+      nocturnal: "#DDA0DD"
+    };
+
+    function coordToXY(coord) {
+      if (coord === "KL") return { x: 50, y: 50 };
+      const floor = parseInt(coord);
+      const letter = coord.replace(/^-?\d+/, '');
+      const colMap = { A: 100, B: 200, C: 300, D: 400, E: 500, F: 600, G: 700, H: 800, I: 900, J: 1000, K: 1100, L: 1200, M: 1300, N: 1400, O: 1500, P: 1600 };
+      const x = colMap[letter];
+      const y = 1050 - (floor * 100);
+      return { x, y };
+    }
+
+    function showRoomDetail(room) {
+      document.getElementById('room-detail-name').textContent = room.name;
+      document.getElementById('room-detail-coord').textContent = room.coord;
+      document.getElementById('room-detail-era').textContent = room.era.charAt(0).toUpperCase() + room.era.slice(1);
+      document.getElementById('room-detail-unlock').textContent = room.unlock;
+      document.getElementById('room-detail-modal').style.display = 'block';
+    }
+
+    let mapScale = 1;
+    function zoomMap(factor) {
+      mapScale *= factor;
+      const svg = document.getElementById('map-svg');
+      svg.style.transform = `scale(${mapScale})`;
+      svg.style.transformOrigin = 'top left';
+    }
+
+    function resetZoom() {
+      mapScale = 1;
+      const svg = document.getElementById('map-svg');
+      svg.style.transform = 'scale(1)';
+    }
+
+    function renderMap() {
+      const group = document.getElementById('rooms-group');
+      mapRooms.forEach(room => {
+        const { x, y } = coordToXY(room.coord);
+        const color = eraColors[room.era];
+        const shortName = room.name.split(':').pop().trim().substring(0, 12);
+        
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x - 35);
+        rect.setAttribute('y', y - 20);
+        rect.setAttribute('width', '70');
+        rect.setAttribute('height', '40');
+        rect.setAttribute('fill', color);
+        rect.setAttribute('stroke', '#333');
+        rect.setAttribute('stroke-width', '1');
+        rect.setAttribute('rx', '2');
+        rect.setAttribute('style', 'cursor:pointer;');
+        rect.onclick = () => showRoomDetail(room);
+        
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x);
+        text.setAttribute('y', y + 5);
+        text.setAttribute('font-size', '9');
+        text.setAttribute('font-weight', 'bold');
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#333');
+        text.setAttribute('pointer-events', 'none');
+        text.textContent = shortName;
+        
+        g.appendChild(rect);
+        g.appendChild(text);
+        group.appendChild(g);
+      });
+    }
+
+    function jumpToTabAndSearch(tabName, searchTerm) {
+      switchMode(tabName);
+      setTimeout(() => {
+        if (tabName === 'workstations') {
+          document.getElementById('workstations-search').value = searchTerm;
+          searchWorkstations();
+        } else if (tabName === 'books') {
+          document.getElementById('books-search').value = searchTerm;
+          searchBooks();
+        } else if (tabName === 'skills') {
+          document.getElementById('skills-search').value = searchTerm;
+          searchSkills();
+        } else if (tabName === 'rooms') {
+          document.getElementById('rooms-search').value = searchTerm;
+          searchRooms();
+        }
+      }, 100);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('room-detail-modal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+
+    // Initialize on page load
+    window.addEventListener('load', function() {
+      renderMap();
+      // Show all results by default on database tabs
       searchRooms();
       searchWorkstations();
       searchBooks();
